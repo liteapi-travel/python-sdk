@@ -95,7 +95,7 @@ class ApiResponseFor200(api_client.ApiResponse):
     headers: ResponseHeadersFor200
 
 
-_response_for_200 = api_client.OpenApiResponse(
+_response_for_200 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor200,
     content={
         'application/json': api_client.MediaType(
@@ -166,7 +166,7 @@ class ApiResponseFor204(api_client.ApiResponse):
     headers: ResponseHeadersFor204
 
 
-_response_for_204 = api_client.OpenApiResponse(
+_response_for_204 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor204,
     content={
         'application/json': api_client.MediaType(
@@ -237,7 +237,7 @@ class ApiResponseFor401(api_client.ApiResponse):
     headers: ResponseHeadersFor401
 
 
-_response_for_401 = api_client.OpenApiResponse(
+_response_for_401 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor401,
     content={
         'application/json': api_client.MediaType(
@@ -268,7 +268,7 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _bookings_get_oapg(
+    def _get_bookings_list_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -281,7 +281,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _bookings_get_oapg(
+    def _get_bookings_list_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -291,7 +291,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _bookings_get_oapg(
+    def _get_bookings_list_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -304,7 +304,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _bookings_get_oapg(
+    def _get_bookings_list_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -372,7 +372,7 @@ class BookingsGet(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def bookings_get(
+    def get_bookings_list(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -385,7 +385,7 @@ class BookingsGet(BaseApi):
     ]: ...
 
     @typing.overload
-    def bookings_get(
+    def get_bookings_list(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -395,7 +395,7 @@ class BookingsGet(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def bookings_get(
+    def get_bookings_list(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -408,7 +408,7 @@ class BookingsGet(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def bookings_get(
+    def get_bookings_list(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -416,13 +416,26 @@ class BookingsGet(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._bookings_get_oapg(
+        return self._get_bookings_list_oapg(
             query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
+
+
+    def get_bookings_list_by_guestId(self,guestId):
+        try:
+            query_params = {
+                'guestId': guestId,
+            }
+            api_response = self.get_bookings_list(
+                query_params=query_params,
+            )
+            return api_response.body
+        except exceptions.ApiException as e:
+            return ("Exception when calling BookingManagementApi->get_bookings_list_by_guestId: %s\n" % e)
 
 
 class ApiForget(BaseApi):
@@ -473,7 +486,7 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._bookings_get_oapg(
+        return self._get_bookings_list_oapg(
             query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,

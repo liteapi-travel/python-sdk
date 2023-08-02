@@ -11,7 +11,7 @@
 from liteapi_client.paths.data_cities.get import DataCitiesGet
 from liteapi_client.paths.data_countries.get import DataCountriesGet
 from liteapi_client.paths.data_currencies.get import DataCurrenciesGet
-from liteapi_client.paths.data_hotel.get import DataHotelGet
+from liteapi_client.paths.data_hotel_details.get import DataHotelGet
 from liteapi_client.paths.data_hotels.get import DataHotelsGet
 from liteapi_client.paths.data_iata_codes.get import DataIataCodesGet
 

@@ -217,10 +217,10 @@ class ApiResponseFor200(api_client.ApiResponse):
     headers: ResponseHeadersFor200
 
 
-_response_for_200 = api_client.OpenApiResponse(
+_response_for_200 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor200ResponseBodyApplicationJson),
     },
     headers=[
@@ -355,10 +355,10 @@ class ApiResponseFor400(api_client.ApiResponse):
     headers: ResponseHeadersFor400
 
 
-_response_for_400 = api_client.OpenApiResponse(
+_response_for_400 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor400,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor400ResponseBodyApplicationJson),
     },
     headers=[
@@ -493,10 +493,10 @@ class ApiResponseFor401(api_client.ApiResponse):
     headers: ResponseHeadersFor401
 
 
-_response_for_401 = api_client.OpenApiResponse(
+_response_for_401 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor401,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor401ResponseBodyApplicationJson),
     },
     headers=[
@@ -522,7 +522,7 @@ _status_code_to_response = {
     '401': _response_for_401,
 }
 _all_accept_content_types = (
-    'application/json',
+    'application/json; charset=utf-8',
 )
 
 
@@ -648,7 +648,7 @@ class DataHotelsGet(BaseApi):
     ]: ...
 
     @typing.overload
-    def get_hotels(
+    def get_hotels_call(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -658,7 +658,7 @@ class DataHotelsGet(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def get_hotels(
+    def get_hotels_call(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -670,7 +670,7 @@ class DataHotelsGet(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def get_hotels(
+    def get_hotels_call(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -685,7 +685,35 @@ class DataHotelsGet(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
+    
+    def get_hotels(
+            self,
+            countryCode: str,
+            cityName: str,
+            offset: str,
+            limit: str,
+            longitude: str,
+            latitude: str,
+            distance: str
+        ):
+        try:
+            query_params = {
+                    'countryCode': countryCode,
+                    'cityName': cityName,
+                    'offset': offset,
+                    'limit': limit,
+                    'longitude': longitude,
+                    'latitude': latitude,
+                    'distance': distance,
+                }
+            
+            api_response = self.get_hotels_call(
+                query_params=query_params
+            )
+            return api_response.body
+        except exceptions.ApiException as e:
+            return ("Exception when calling StaticDataApi->get_hotels: %s\n" % e)
+        
 
 class ApiForget(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names

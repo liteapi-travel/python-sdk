@@ -8,8 +8,8 @@
 
 """
 
-from liteapi_client.paths.hotels.get import HotelsGet
-from liteapi_client.paths.hotels_rates.get import HotelsRatesGet
+from liteapi_client.paths.minimum_rates.get import HotelsGet
+from liteapi_client.paths.full_rates.get import HotelsRatesGet
 
 
 class SearchApi(

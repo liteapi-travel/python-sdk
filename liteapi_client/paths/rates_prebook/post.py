@@ -24,12 +24,67 @@ from liteapi_client import schemas  # noqa: F401
 from . import path
 
 # body param
-SchemaForRequestBodyApplicationJson = schemas.AnyTypeSchema
+class SchemaForRequestBodyApplicationJson(
+    schemas.AnyTypeSchema,
+):
+
+
+    class MetaOapg:
+        required = {
+            "rateId",
+        }
+        
+        class properties:
+            rateId = schemas.AnyTypeSchema
+            
+            
+            __annotations__ = {
+                "rateId": rateId,
+            }
+
+    
+    rateId: MetaOapg.properties.rateId
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["rateId"]) -> MetaOapg.properties.rateId: ...
+    
+    @typing.overload
+    def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
+    
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["rateId", ], str]):
+        # dict_instance[name] accessor
+        return super().__getitem__(name)
+    
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["rateId"]) -> MetaOapg.properties.rateId: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
+    
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["rateId", ], str]):
+        return super().get_item_oapg(name)
+    
+
+    def __new__(
+        cls,
+        *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        rateId: typing.Union[MetaOapg.properties.rateId, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+        **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+    ) -> 'SchemaForRequestBodyApplicationJson':
+        return super().__new__(
+            cls,
+            *_args,
+            rateId=rateId,
+            _configuration=_configuration,
+            **kwargs,
+        )
 
 
 request_body_body = api_client.RequestBody(
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaForRequestBodyApplicationJson),
     },
 )
@@ -151,10 +206,10 @@ class ApiResponseFor200(api_client.ApiResponse):
     headers: ResponseHeadersFor200
 
 
-_response_for_200 = api_client.OpenApiResponse(
+_response_for_200 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor200ResponseBodyApplicationJson),
     },
     headers=[
@@ -296,10 +351,10 @@ class ApiResponseFor400(api_client.ApiResponse):
     headers: ResponseHeadersFor400
 
 
-_response_for_400 = api_client.OpenApiResponse(
+_response_for_400 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor400,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor400ResponseBodyApplicationJson),
     },
     headers=[
@@ -442,10 +497,10 @@ class ApiResponseFor401(api_client.ApiResponse):
     headers: ResponseHeadersFor401
 
 
-_response_for_401 = api_client.OpenApiResponse(
+_response_for_401 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor401,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor401ResponseBodyApplicationJson),
     },
     headers=[
@@ -472,13 +527,13 @@ _status_code_to_response = {
     '401': _response_for_401,
 }
 _all_accept_content_types = (
-    'application/json',
+    'application/json; charset=utf-8',
 )
 
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _rates_prebook_post_oapg(
+    def _prebook_oapg(
         self,
         content_type: typing_extensions.Literal["application/json"] = ...,
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -491,7 +546,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _rates_prebook_post_oapg(
+    def _prebook_oapg(
         self,
         content_type: str = ...,
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -505,7 +560,7 @@ class BaseApi(api_client.Api):
 
 
     @typing.overload
-    def _rates_prebook_post_oapg(
+    def _prebook_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
@@ -516,7 +571,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _rates_prebook_post_oapg(
+    def _prebook_oapg(
         self,
         content_type: str = ...,
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -529,7 +584,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _rates_prebook_post_oapg(
+    def _prebook_oapg(
         self,
         content_type: str = 'application/json',
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -595,7 +650,7 @@ class RatesPrebookPost(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def rates_prebook_post(
+    def prebook_call(
         self,
         content_type: typing_extensions.Literal["application/json"] = ...,
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -608,7 +663,7 @@ class RatesPrebookPost(BaseApi):
     ]: ...
 
     @typing.overload
-    def rates_prebook_post(
+    def prebook_call(
         self,
         content_type: str = ...,
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -622,7 +677,7 @@ class RatesPrebookPost(BaseApi):
 
 
     @typing.overload
-    def rates_prebook_post(
+    def prebook_call(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
@@ -633,7 +688,7 @@ class RatesPrebookPost(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def rates_prebook_post(
+    def prebook_call(
         self,
         content_type: str = ...,
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -646,7 +701,7 @@ class RatesPrebookPost(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def rates_prebook_post(
+    def prebook_call(
         self,
         content_type: str = 'application/json',
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -655,7 +710,7 @@ class RatesPrebookPost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._rates_prebook_post_oapg(
+        return self._prebook_oapg(
             body=body,
             content_type=content_type,
             accept_content_types=accept_content_types,
@@ -663,6 +718,22 @@ class RatesPrebookPost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
+
+    def prebook(
+            self,
+            rateId: str,
+        ):
+        try:
+            body = SchemaForRequestBodyApplicationJson(
+                rateId=rateId
+                )
+            
+            api_response = self.prebook_call(
+                body=body
+            )
+            return api_response.body
+        except exceptions.ApiException as e:
+            return ("Exception when calling BookApi->prebook: %s\n" % e)
 
 
 class ApiForpost(BaseApi):
@@ -729,7 +800,7 @@ class ApiForpost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._rates_prebook_post_oapg(
+        return self._prebook_oapg(
             body=body,
             content_type=content_type,
             accept_content_types=accept_content_types,

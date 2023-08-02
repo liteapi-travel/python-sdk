@@ -66,10 +66,10 @@ class ApiResponseFor200(api_client.ApiResponse):
     headers: ResponseHeadersFor200
 
 
-_response_for_200 = api_client.OpenApiResponse(
+_response_for_200 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor200ResponseBodyApplicationJson),
     },
     headers=[
@@ -134,10 +134,10 @@ class ApiResponseFor401(api_client.ApiResponse):
     headers: ResponseHeadersFor401
 
 
-_response_for_401 = api_client.OpenApiResponse(
+_response_for_401 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor401,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor401ResponseBodyApplicationJson),
     },
     headers=[
@@ -158,7 +158,7 @@ _response_for_401 = api_client.OpenApiResponse(
     ]
 )
 _all_accept_content_types = (
-    'application/json',
+    'application/json; charset=utf-8',
 )
 
 
@@ -248,7 +248,7 @@ class DataCountriesGet(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_countries(
+    def get_countries_call(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -259,7 +259,7 @@ class DataCountriesGet(BaseApi):
     ]: ...
 
     @typing.overload
-    def get_countries(
+    def get_countries_call(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -268,7 +268,7 @@ class DataCountriesGet(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def get_countries(
+    def get_countries_call(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -279,7 +279,7 @@ class DataCountriesGet(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def get_countries(
+    def get_countries_call(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -293,6 +293,12 @@ class DataCountriesGet(BaseApi):
             skip_deserialization=skip_deserialization
         )
 
+    def get_countries(self):
+        try:
+            api_response = self.get_countries_call()
+            return api_response.body
+        except exceptions.ApiException as e:
+            return ("Exception when calling StaticDataApi->get_countries: %s\n" % e)
 
 class ApiForget(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names

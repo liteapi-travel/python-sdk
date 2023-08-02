@@ -231,7 +231,7 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _bookings_booking_id_get_oapg(
+    def _retrieved_booking_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -244,7 +244,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _bookings_booking_id_get_oapg(
+    def _retrieved_booking_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         path_params: RequestPathParams = frozendict.frozendict(),
@@ -254,7 +254,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _bookings_booking_id_get_oapg(
+    def _retrieved_booking_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -267,7 +267,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _bookings_booking_id_get_oapg(
+    def _retrieved_booking_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -335,7 +335,7 @@ class BookingsBookingIdGet(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def bookings_booking_id_get(
+    def retrieved_booking_call(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -348,7 +348,7 @@ class BookingsBookingIdGet(BaseApi):
     ]: ...
 
     @typing.overload
-    def bookings_booking_id_get(
+    def retrieved_booking_call(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         path_params: RequestPathParams = frozendict.frozendict(),
@@ -358,7 +358,7 @@ class BookingsBookingIdGet(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def bookings_booking_id_get(
+    def retrieved_booking_call(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -371,7 +371,7 @@ class BookingsBookingIdGet(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def bookings_booking_id_get(
+    def retrieved_booking_call(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -379,13 +379,25 @@ class BookingsBookingIdGet(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._bookings_booking_id_get_oapg(
+        return self._retrieved_booking_oapg(
             path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
+
+    def retrieved_booking(self,bookingId):
+        try:
+            query_params = {
+                'bookingId': bookingId,
+            }
+            api_response = self.retrieved_booking_call(
+                query_params=query_params,
+            )
+            return api_response.body
+        except exceptions.ApiException as e:
+            return ("Exception when calling BookingManagementApi->retrieved_booking: %s\n" % e)
 
 
 class ApiForget(BaseApi):
@@ -436,7 +448,7 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._bookings_booking_id_get_oapg(
+        return self._retrieved_booking_oapg(
             path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,

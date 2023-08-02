@@ -174,10 +174,10 @@ class ApiResponseFor200(api_client.ApiResponse):
     headers: ResponseHeadersFor200
 
 
-_response_for_200 = api_client.OpenApiResponse(
+_response_for_200 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor200ResponseBodyApplicationJson),
     },
     headers=[
@@ -320,10 +320,10 @@ class ApiResponseFor400(api_client.ApiResponse):
     headers: ResponseHeadersFor400
 
 
-_response_for_400 = api_client.OpenApiResponse(
+_response_for_400 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor400,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor400ResponseBodyApplicationJson),
     },
     headers=[
@@ -466,10 +466,10 @@ class ApiResponseFor401(api_client.ApiResponse):
     headers: ResponseHeadersFor401
 
 
-_response_for_401 = api_client.OpenApiResponse(
+_response_for_401 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor401,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor401ResponseBodyApplicationJson),
     },
     headers=[
@@ -496,13 +496,13 @@ _status_code_to_response = {
     '401': _response_for_401,
 }
 _all_accept_content_types = (
-    'application/json',
+    'application/json; charset=utf-8',
 )
 
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _guests_get_oapg(
+    def _get_guests_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -514,7 +514,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _guests_get_oapg(
+    def _get_guests_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -524,7 +524,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _guests_get_oapg(
+    def _get_guests_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -536,7 +536,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _guests_get_oapg(
+    def _get_guests_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -604,7 +604,7 @@ class GuestsGet(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def guests_get(
+    def get_guests_call(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -616,7 +616,7 @@ class GuestsGet(BaseApi):
     ]: ...
 
     @typing.overload
-    def guests_get(
+    def get_guests_call(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -626,7 +626,7 @@ class GuestsGet(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def guests_get(
+    def get_guests_call(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -638,7 +638,7 @@ class GuestsGet(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def guests_get(
+    def get_guests_call(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -646,13 +646,30 @@ class GuestsGet(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._guests_get_oapg(
+        return self._get_guests_oapg(
             query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
+
+    def get_guests(
+            self,
+            email: str,
+        ):
+        try:
+            query_params = {
+                    'email': email
+                }
+            
+            api_response = self.get_guests_call(
+                query_params=query_params
+            )
+            return api_response.body
+        except exceptions.ApiException as e:
+            return ("Exception when calling StaticDataApi->get_guests: %s\n" % e)
+        
 
 
 class ApiForget(BaseApi):
@@ -701,7 +718,7 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._guests_get_oapg(
+        return self._get_guests_oapg(
             query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,

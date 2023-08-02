@@ -327,7 +327,7 @@ class SchemaForRequestBodyApplicationJson(
 
 request_body_any_type = api_client.RequestBody(
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaForRequestBodyApplicationJson),
     },
 )
@@ -378,10 +378,10 @@ class ApiResponseFor200(api_client.ApiResponse):
     headers: ResponseHeadersFor200
 
 
-_response_for_200 = api_client.OpenApiResponse(
+_response_for_200 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor200ResponseBodyApplicationJson),
     },
     headers=[
@@ -449,10 +449,10 @@ class ApiResponseFor400(api_client.ApiResponse):
     headers: ResponseHeadersFor400
 
 
-_response_for_400 = api_client.OpenApiResponse(
+_response_for_400 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor400,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor400ResponseBodyApplicationJson),
     },
     headers=[
@@ -520,10 +520,10 @@ class ApiResponseFor401(api_client.ApiResponse):
     headers: ResponseHeadersFor401
 
 
-_response_for_401 = api_client.OpenApiResponse(
+_response_for_401 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor401,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor401ResponseBodyApplicationJson),
     },
     headers=[
@@ -545,13 +545,13 @@ _response_for_401 = api_client.OpenApiResponse(
     ]
 )
 _all_accept_content_types = (
-    'application/json',
+    'application/json; charset=utf-8',
 )
 
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _rates_book_post_oapg(
+    def _book_oapg(
         self,
         content_type: typing_extensions.Literal["application/json"] = ...,
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -564,7 +564,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _rates_book_post_oapg(
+    def _book_oapg(
         self,
         content_type: str = ...,
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -578,7 +578,7 @@ class BaseApi(api_client.Api):
 
 
     @typing.overload
-    def _rates_book_post_oapg(
+    def _book_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
@@ -589,7 +589,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _rates_book_post_oapg(
+    def _book_oapg(
         self,
         content_type: str = ...,
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -602,7 +602,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _rates_book_post_oapg(
+    def _book_oapg(
         self,
         content_type: str = 'application/json',
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -668,7 +668,7 @@ class RatesBookPost(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def rates_book_post(
+    def book_call(
         self,
         content_type: typing_extensions.Literal["application/json"] = ...,
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -681,7 +681,7 @@ class RatesBookPost(BaseApi):
     ]: ...
 
     @typing.overload
-    def rates_book_post(
+    def book_call(
         self,
         content_type: str = ...,
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -695,7 +695,7 @@ class RatesBookPost(BaseApi):
 
 
     @typing.overload
-    def rates_book_post(
+    def book_call(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
@@ -706,7 +706,7 @@ class RatesBookPost(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def rates_book_post(
+    def book_call(
         self,
         content_type: str = ...,
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -719,7 +719,7 @@ class RatesBookPost(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def rates_book_post(
+    def book_call(
         self,
         content_type: str = 'application/json',
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -728,7 +728,7 @@ class RatesBookPost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._rates_book_post_oapg(
+        return self._book_oapg(
             body=body,
             content_type=content_type,
             accept_content_types=accept_content_types,
@@ -737,6 +737,55 @@ class RatesBookPost(BaseApi):
             skip_deserialization=skip_deserialization
         )
 
+    def book(
+            self,
+            prebookId: str,
+            guestFirstName: str,
+            guestLastName: str,
+            guestEmail: str,
+            holderName: str,
+            paymentMethod: str,
+            number: str,
+            expireMonth: str,
+            expireYear: str,
+            cvc: str,
+            token: str,
+        ):
+        try:
+            guest_info = SchemaForRequestBodyApplicationJson.MetaOapg.properties.guestInfo(
+                guestFirstName=guestFirstName,
+                guestLastName=guestLastName,
+                guestEmail=guestEmail
+            )
+
+            if paymentMethod == "CREDIT_CARD":
+                payment = SchemaForRequestBodyApplicationJson.MetaOapg.properties.payment(
+                    holderName=holderName,
+                    number=number,
+                    expireDate=expireMonth+"/"+expireYear,
+                    cvc=cvc,
+                    number=number,
+                    method=SchemaForRequestBodyApplicationJson.MetaOapg.properties.payment.method[paymentMethod]
+                )
+            else:
+                payment = SchemaForRequestBodyApplicationJson.MetaOapg.properties.payment(
+                    holderName=holderName,
+                    token=token,
+                    method=SchemaForRequestBodyApplicationJson.MetaOapg.properties.payment.method[paymentMethod]
+                )
+            
+            body = SchemaForRequestBodyApplicationJson(
+                prebookId=prebookId,
+                guestInfo=guest_info,
+                payment=payment
+                )
+            
+            api_response = self.book_call(
+                body=body
+            )
+            return api_response.body
+        except exceptions.ApiException as e:
+            return ("Exception when calling BookApi->book: %s\n" % e)
 
 class ApiForpost(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names
@@ -802,7 +851,7 @@ class ApiForpost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._rates_book_post_oapg(
+        return self._book_oapg(
             body=body,
             content_type=content_type,
             accept_content_types=accept_content_types,

@@ -367,7 +367,7 @@ class ParameterBase(JSONDetector):
         ParameterInType.HEADER: ParameterStyle.SIMPLE,
         ParameterInType.COOKIE: ParameterStyle.FORM,
     }
-    __disallowed_header_names = {'Accept', 'Content-Type', 'Authorization'}
+    __disallowed_header_names = {'Accept', 'Authorization'}
     _json_encoder = JSONEncoder()
 
     @classmethod
@@ -934,15 +934,13 @@ class LiteApiResponse(JSONDetector):
                 content_type = 'multipart/form-data'
             else:
                 raise NotImplementedError('Deserialization of {} has not yet been implemented'.format(content_type))
-            deserialized_body = body_schema.from_liteapi_data_oapg(
-                body_data, _configuration=configuration)
         elif streamed:
             response.release_conn()
 
         return self.response_cls(
             response=response,
             headers=deserialized_headers,
-            body=deserialized_body
+            body=body_data
         )
 
 

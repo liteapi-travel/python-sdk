@@ -141,10 +141,10 @@ class ApiResponseFor200(api_client.ApiResponse):
     headers: ResponseHeadersFor200
 
 
-_response_for_200 = api_client.OpenApiResponse(
+_response_for_200 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor200ResponseBodyApplicationJson),
     },
     headers=[
@@ -279,10 +279,10 @@ class ApiResponseFor401(api_client.ApiResponse):
     headers: ResponseHeadersFor401
 
 
-_response_for_401 = api_client.OpenApiResponse(
+_response_for_401 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor401,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor401ResponseBodyApplicationJson),
     },
     headers=[
@@ -307,7 +307,7 @@ _status_code_to_response = {
     '401': _response_for_401,
 }
 _all_accept_content_types = (
-    'application/json',
+    'application/json; charset=utf-8',
 )
 
 
@@ -397,7 +397,7 @@ class DataCurrenciesGet(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_currencies(
+    def get_currencies_call(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -408,7 +408,7 @@ class DataCurrenciesGet(BaseApi):
     ]: ...
 
     @typing.overload
-    def get_currencies(
+    def get_currencies_call(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -417,7 +417,7 @@ class DataCurrenciesGet(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def get_currencies(
+    def get_currencies_call(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -428,7 +428,7 @@ class DataCurrenciesGet(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def get_currencies(
+    def get_currencies_call(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -442,6 +442,13 @@ class DataCurrenciesGet(BaseApi):
             skip_deserialization=skip_deserialization
         )
 
+    def get_currencies(self):
+        try:
+            api_response = self.get_currencies_call()
+            return api_response.body
+        except exceptions.ApiException as e:
+            return ("Exception when calling StaticDataApi->get_currencies: %s\n" % e)
+        
 
 class ApiForget(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names

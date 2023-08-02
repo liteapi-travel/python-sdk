@@ -94,7 +94,7 @@ class ApiResponseFor200(api_client.ApiResponse):
     headers: ResponseHeadersFor200
 
 
-_response_for_200 = api_client.OpenApiResponse(
+_response_for_200 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor200,
     content={
         'application/json': api_client.MediaType(
@@ -153,7 +153,7 @@ class ApiResponseFor204(api_client.ApiResponse):
     headers: ResponseHeadersFor204
 
 
-_response_for_204 = api_client.OpenApiResponse(
+_response_for_204 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor204,
     content={
         'application/json': api_client.MediaType(
@@ -206,7 +206,7 @@ class ApiResponseFor304(api_client.ApiResponse):
     headers: ResponseHeadersFor304
 
 
-_response_for_304 = api_client.OpenApiResponse(
+_response_for_304 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor304,
     content={
         'application/json': api_client.MediaType(
@@ -259,7 +259,7 @@ class ApiResponseFor401(api_client.ApiResponse):
     headers: ResponseHeadersFor401
 
 
-_response_for_401 = api_client.OpenApiResponse(
+_response_for_401 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor401,
     content={
         'application/json': api_client.MediaType(
@@ -284,7 +284,7 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _bookings_booking_id_put_oapg(
+    def _cancel_booking_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -297,7 +297,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _bookings_booking_id_put_oapg(
+    def _cancel_booking_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         path_params: RequestPathParams = frozendict.frozendict(),
@@ -307,7 +307,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _bookings_booking_id_put_oapg(
+    def _cancel_booking_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -320,7 +320,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _bookings_booking_id_put_oapg(
+    def _cancel_booking_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -388,7 +388,7 @@ class BookingsBookingIdPut(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def bookings_booking_id_put(
+    def cancel_booking_call(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -401,7 +401,7 @@ class BookingsBookingIdPut(BaseApi):
     ]: ...
 
     @typing.overload
-    def bookings_booking_id_put(
+    def cancel_booking_call(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         path_params: RequestPathParams = frozendict.frozendict(),
@@ -411,7 +411,7 @@ class BookingsBookingIdPut(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def bookings_booking_id_put(
+    def cancel_booking_call(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -424,7 +424,7 @@ class BookingsBookingIdPut(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def bookings_booking_id_put(
+    def cancel_booking_call(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -432,13 +432,26 @@ class BookingsBookingIdPut(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._bookings_booking_id_put_oapg(
+        return self._cancel_booking_oapg(
             path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
+
+    def cancel_booking(self,bookingId):
+        try:
+            query_params = {
+                'bookingId': bookingId,
+            }
+            api_response = self.cancel_booking_call(
+                query_params=query_params,
+            )
+            return api_response.body
+        except exceptions.ApiException as e:
+            return ("Exception when calling BookingManagementApi->retrieved_booking: %s\n" % e)
+
 
 
 class ApiForput(BaseApi):
@@ -489,7 +502,7 @@ class ApiForput(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._bookings_booking_id_put_oapg(
+        return self._cancel_booking_oapg(
             path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
