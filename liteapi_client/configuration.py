@@ -128,7 +128,7 @@ conf = liteapi_client.Configuration(
         # Authentication Settings
         self.api_key = {}
         if api_key:
-            self.api_key = api_key
+            self.api_key['apikeyAuth'] = api_key
         """dict to store API key(s)
         """
         self.api_key_prefix = {}

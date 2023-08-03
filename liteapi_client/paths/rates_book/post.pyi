@@ -721,7 +721,7 @@ class RatesBookPost(BaseApi):
 
     def book_call(
         self,
-        content_type: str = 'application/json',
+        content_type: str = 'application/json; charset=utf-8',
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -745,11 +745,11 @@ class RatesBookPost(BaseApi):
             guestEmail: str,
             holderName: str,
             paymentMethod: str,
-            number: str,
-            expireMonth: str,
-            expireYear: str,
-            cvc: str,
-            token: str,
+            cardNumber: str = None,
+            expireMonth: str = None,
+            expireYear: str = None,
+            cvc: str = None,
+            token: str = None,
         ):
         try:
             guest_info = SchemaForRequestBodyApplicationJson.MetaOapg.properties.guestInfo(
@@ -761,17 +761,17 @@ class RatesBookPost(BaseApi):
             if paymentMethod == "CREDIT_CARD":
                 payment = SchemaForRequestBodyApplicationJson.MetaOapg.properties.payment(
                     holderName=holderName,
-                    number=number,
+                    number=cardNumber,
                     expireDate=expireMonth+"/"+expireYear,
                     cvc=cvc,
-                    number=number,
-                    method=SchemaForRequestBodyApplicationJson.MetaOapg.properties.payment.method[paymentMethod]
+                    method=SchemaForRequestBodyApplicationJson.MetaOapg.properties.payment.MetaOapg.properties.method.CREDIT_CARD
+                    
                 )
-            else:
+            elif paymentMethod == "STRIPE_TOKEN":
                 payment = SchemaForRequestBodyApplicationJson.MetaOapg.properties.payment(
                     holderName=holderName,
                     token=token,
-                    method=SchemaForRequestBodyApplicationJson.MetaOapg.properties.payment.method[paymentMethod]
+                    method=SchemaForRequestBodyApplicationJson.MetaOapg.properties.payment.MetaOapg.properties.method.STRIPE_TOKEN
                 )
             
             body = SchemaForRequestBodyApplicationJson(

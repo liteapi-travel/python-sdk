@@ -1,5 +1,5 @@
-from liteapi_client.paths.bookings_booking_id.get import ApiForget
-from liteapi_client.paths.bookings_booking_id.put import ApiForput
+from liteapi_client.paths.booking_management.get import ApiForget
+from liteapi_client.paths.booking_management.put import ApiForput
 
 
 class BookingsBookingId(

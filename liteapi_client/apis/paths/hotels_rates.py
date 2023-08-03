@@ -1,4 +1,4 @@
-from liteapi_client.paths.hotels_rates.get import ApiForget
+from liteapi_client.paths.full_rates.get import ApiForget
 
 
 class HotelsRates(

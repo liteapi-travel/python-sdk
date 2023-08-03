@@ -1,4 +1,4 @@
-from liteapi_client.paths.data_hotel.get import ApiForget
+from liteapi_client.paths.data_hotel_details.get import ApiForget
 
 
 class DataHotel(

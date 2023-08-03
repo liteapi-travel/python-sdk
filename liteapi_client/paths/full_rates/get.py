@@ -711,20 +711,25 @@ class HotelsRatesGet(BaseApi):
             currency: str,
             guestNationality: str,
             adults: str,
-            children: str,
-            guestId: str,
+            children:str = None,
+            guestId:str = None,
         ):
         try:
+            hotelIdsStr = ",".join(hotelIds)
             query_params = {
-                    hotelIds: hotelIds,
-                    checkin: checkin,
-                    checkout: checkout,
-                    currency: currency,
-                    guestNationality: guestNationality,
-                    adults: adults,
-                    children:children,
-                    guestId:guestId
+                    'hotelIds': hotelIdsStr,
+                    'checkin': checkin,
+                    'checkout': checkout,
+                    'currency': currency,
+                    'guestNationality': guestNationality,
+                    'adults': adults,
                 }
+            if children is not None:
+                childrenStr = ",".join(map(str, children))
+                query_params['children'] = childrenStr
+            if guestId is not None:
+                query_params['guestId'] = guestId
+
             api_response = self.get_full_rates_call(
                 query_params=query_params
             )

@@ -21,31 +21,32 @@ import frozendict  # noqa: F401
 
 from liteapi_client import schemas  # noqa: F401
 
-# Path params
-BookingIdSchema = schemas.AnyTypeSchema
-RequestRequiredPathParams = typing_extensions.TypedDict(
-    'RequestRequiredPathParams',
+# Query params
+GuestIdSchema = schemas.AnyTypeSchema
+RequestRequiredQueryParams = typing_extensions.TypedDict(
+    'RequestRequiredQueryParams',
     {
-        'bookingId': typing.Union[BookingIdSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        'guestId': typing.Union[GuestIdSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
     }
 )
-RequestOptionalPathParams = typing_extensions.TypedDict(
-    'RequestOptionalPathParams',
+RequestOptionalQueryParams = typing_extensions.TypedDict(
+    'RequestOptionalQueryParams',
     {
     },
     total=False
 )
 
 
-class RequestPathParams(RequestRequiredPathParams, RequestOptionalPathParams):
+class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams):
     pass
 
 
-request_path_booking_id = api_client.PathParameter(
-    name="bookingId",
-    style=api_client.ParameterStyle.SIMPLE,
-    schema=BookingIdSchema,
+request_query_guest_id = api_client.QueryParameter(
+    name="guestId",
+    style=api_client.ParameterStyle.FORM,
+    schema=GuestIdSchema,
     required=True,
+    explode=True,
 )
 DateSchema = schemas.AnyTypeSchema
 ContentTypeSchema = schemas.AnyTypeSchema
@@ -97,7 +98,7 @@ class ApiResponseFor200(api_client.ApiResponse):
 _response_for_200 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor200ResponseBodyApplicationJson),
     },
     headers=[
@@ -118,28 +119,40 @@ _response_for_200 = api_client.LiteApiResponse(
         access_control_allow_credentials_parameter,
     ]
 )
-AccessControlAllowCredentialsSchema = schemas.AnyTypeSchema
-AccessControlAllowHeadersSchema = schemas.AnyTypeSchema
-AccessControlAllowMethodsSchema = schemas.AnyTypeSchema
-AccessControlAllowOriginSchema = schemas.AnyTypeSchema
-AccessControlExposeHeadersSchema = schemas.AnyTypeSchema
-AccessControlMaxAgeSchema = schemas.AnyTypeSchema
-ContentTypeSchema = schemas.AnyTypeSchema
 DateSchema = schemas.AnyTypeSchema
+ContentTypeSchema = schemas.AnyTypeSchema
 ContentLengthSchema = schemas.AnyTypeSchema
+ConnectionSchema = schemas.AnyTypeSchema
+XAmznRequestIdSchema = schemas.AnyTypeSchema
+AccessControlAllowOriginSchema = schemas.AnyTypeSchema
+ContentEncodingSchema = schemas.AnyTypeSchema
+AccessControlAllowHeadersSchema = schemas.AnyTypeSchema
+XAmznRemappedContentLengthSchema = schemas.AnyTypeSchema
+XAmzApigwIdSchema = schemas.AnyTypeSchema
+AccessControlAllowMethodsSchema = schemas.AnyTypeSchema
+AccessControlExposeHeadersSchema = schemas.AnyTypeSchema
+XAmznRemappedDateSchema = schemas.AnyTypeSchema
+AccessControlMaxAgeSchema = schemas.AnyTypeSchema
+AccessControlAllowCredentialsSchema = schemas.AnyTypeSchema
 SchemaFor204ResponseBodyApplicationJson = schemas.AnyTypeSchema
 ResponseHeadersFor204 = typing_extensions.TypedDict(
     'ResponseHeadersFor204',
     {
-        'Access-Control-Allow-Credentials': AccessControlAllowCredentialsSchema,
-        'Access-Control-Allow-Headers': AccessControlAllowHeadersSchema,
-        'Access-Control-Allow-Methods': AccessControlAllowMethodsSchema,
-        'Access-Control-Allow-Origin': AccessControlAllowOriginSchema,
-        'Access-Control-Expose-Headers': AccessControlExposeHeadersSchema,
-        'Access-Control-Max-Age': AccessControlMaxAgeSchema,
-        'Content-Type': ContentTypeSchema,
         'Date': DateSchema,
+        'Content-Type': ContentTypeSchema,
         'Content-Length': ContentLengthSchema,
+        'Connection': ConnectionSchema,
+        'x-amzn-RequestId': XAmznRequestIdSchema,
+        'Access-Control-Allow-Origin': AccessControlAllowOriginSchema,
+        'Content-Encoding': ContentEncodingSchema,
+        'Access-Control-Allow-Headers': AccessControlAllowHeadersSchema,
+        'x-amzn-Remapped-Content-Length': XAmznRemappedContentLengthSchema,
+        'x-amz-apigw-id': XAmzApigwIdSchema,
+        'Access-Control-Allow-Methods': AccessControlAllowMethodsSchema,
+        'Access-Control-Expose-Headers': AccessControlExposeHeadersSchema,
+        'x-amzn-Remapped-Date': XAmznRemappedDateSchema,
+        'Access-Control-Max-Age': AccessControlMaxAgeSchema,
+        'Access-Control-Allow-Credentials': AccessControlAllowCredentialsSchema,
     }
 )
 
@@ -156,96 +169,61 @@ class ApiResponseFor204(api_client.ApiResponse):
 _response_for_204 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor204,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor204ResponseBodyApplicationJson),
     },
     headers=[
-        access_control_allow_credentials_parameter,
-        access_control_allow_headers_parameter,
-        access_control_allow_methods_parameter,
-        access_control_allow_origin_parameter,
-        access_control_expose_headers_parameter,
-        access_control_max_age_parameter,
-        content_type_parameter,
         date_parameter,
-        content_length_parameter,
-    ]
-)
-AccessControlAllowCredentialsSchema = schemas.AnyTypeSchema
-AccessControlAllowHeadersSchema = schemas.AnyTypeSchema
-AccessControlAllowMethodsSchema = schemas.AnyTypeSchema
-AccessControlAllowOriginSchema = schemas.AnyTypeSchema
-AccessControlExposeHeadersSchema = schemas.AnyTypeSchema
-AccessControlMaxAgeSchema = schemas.AnyTypeSchema
-ContentTypeSchema = schemas.AnyTypeSchema
-DateSchema = schemas.AnyTypeSchema
-ContentLengthSchema = schemas.AnyTypeSchema
-SchemaFor304ResponseBodyApplicationJson = schemas.AnyTypeSchema
-ResponseHeadersFor304 = typing_extensions.TypedDict(
-    'ResponseHeadersFor304',
-    {
-        'Access-Control-Allow-Credentials': AccessControlAllowCredentialsSchema,
-        'Access-Control-Allow-Headers': AccessControlAllowHeadersSchema,
-        'Access-Control-Allow-Methods': AccessControlAllowMethodsSchema,
-        'Access-Control-Allow-Origin': AccessControlAllowOriginSchema,
-        'Access-Control-Expose-Headers': AccessControlExposeHeadersSchema,
-        'Access-Control-Max-Age': AccessControlMaxAgeSchema,
-        'Content-Type': ContentTypeSchema,
-        'Date': DateSchema,
-        'Content-Length': ContentLengthSchema,
-    }
-)
-
-
-@dataclass
-class ApiResponseFor304(api_client.ApiResponse):
-    response: urllib3.HTTPResponse
-    body: typing.Union[
-        SchemaFor304ResponseBodyApplicationJson,
-    ]
-    headers: ResponseHeadersFor304
-
-
-_response_for_304 = api_client.LiteApiResponse(
-    response_cls=ApiResponseFor304,
-    content={
-        'application/json': api_client.MediaType(
-            schema=SchemaFor304ResponseBodyApplicationJson),
-    },
-    headers=[
-        access_control_allow_credentials_parameter,
-        access_control_allow_headers_parameter,
-        access_control_allow_methods_parameter,
-        access_control_allow_origin_parameter,
-        access_control_expose_headers_parameter,
-        access_control_max_age_parameter,
         content_type_parameter,
-        date_parameter,
         content_length_parameter,
+        connection_parameter,
+        x_amzn_request_id_parameter,
+        access_control_allow_origin_parameter,
+        content_encoding_parameter,
+        access_control_allow_headers_parameter,
+        x_amzn_remapped_content_length_parameter,
+        x_amz_apigw_id_parameter,
+        access_control_allow_methods_parameter,
+        access_control_expose_headers_parameter,
+        x_amzn_remapped_date_parameter,
+        access_control_max_age_parameter,
+        access_control_allow_credentials_parameter,
     ]
 )
-AccessControlAllowCredentialsSchema = schemas.AnyTypeSchema
-AccessControlAllowHeadersSchema = schemas.AnyTypeSchema
-AccessControlAllowMethodsSchema = schemas.AnyTypeSchema
-AccessControlAllowOriginSchema = schemas.AnyTypeSchema
-AccessControlExposeHeadersSchema = schemas.AnyTypeSchema
-AccessControlMaxAgeSchema = schemas.AnyTypeSchema
-ContentTypeSchema = schemas.AnyTypeSchema
 DateSchema = schemas.AnyTypeSchema
+ContentTypeSchema = schemas.AnyTypeSchema
 ContentLengthSchema = schemas.AnyTypeSchema
+ConnectionSchema = schemas.AnyTypeSchema
+XAmznRequestIdSchema = schemas.AnyTypeSchema
+AccessControlAllowOriginSchema = schemas.AnyTypeSchema
+ContentEncodingSchema = schemas.AnyTypeSchema
+AccessControlAllowHeadersSchema = schemas.AnyTypeSchema
+XAmznRemappedContentLengthSchema = schemas.AnyTypeSchema
+XAmzApigwIdSchema = schemas.AnyTypeSchema
+AccessControlAllowMethodsSchema = schemas.AnyTypeSchema
+AccessControlExposeHeadersSchema = schemas.AnyTypeSchema
+XAmznRemappedDateSchema = schemas.AnyTypeSchema
+AccessControlMaxAgeSchema = schemas.AnyTypeSchema
+AccessControlAllowCredentialsSchema = schemas.AnyTypeSchema
 SchemaFor401ResponseBodyApplicationJson = schemas.AnyTypeSchema
 ResponseHeadersFor401 = typing_extensions.TypedDict(
     'ResponseHeadersFor401',
     {
-        'Access-Control-Allow-Credentials': AccessControlAllowCredentialsSchema,
-        'Access-Control-Allow-Headers': AccessControlAllowHeadersSchema,
-        'Access-Control-Allow-Methods': AccessControlAllowMethodsSchema,
-        'Access-Control-Allow-Origin': AccessControlAllowOriginSchema,
-        'Access-Control-Expose-Headers': AccessControlExposeHeadersSchema,
-        'Access-Control-Max-Age': AccessControlMaxAgeSchema,
-        'Content-Type': ContentTypeSchema,
         'Date': DateSchema,
+        'Content-Type': ContentTypeSchema,
         'Content-Length': ContentLengthSchema,
+        'Connection': ConnectionSchema,
+        'x-amzn-RequestId': XAmznRequestIdSchema,
+        'Access-Control-Allow-Origin': AccessControlAllowOriginSchema,
+        'Content-Encoding': ContentEncodingSchema,
+        'Access-Control-Allow-Headers': AccessControlAllowHeadersSchema,
+        'x-amzn-Remapped-Content-Length': XAmznRemappedContentLengthSchema,
+        'x-amz-apigw-id': XAmzApigwIdSchema,
+        'Access-Control-Allow-Methods': AccessControlAllowMethodsSchema,
+        'Access-Control-Expose-Headers': AccessControlExposeHeadersSchema,
+        'x-amzn-Remapped-Date': XAmznRemappedDateSchema,
+        'Access-Control-Max-Age': AccessControlMaxAgeSchema,
+        'Access-Control-Allow-Credentials': AccessControlAllowCredentialsSchema,
     }
 )
 
@@ -262,31 +240,37 @@ class ApiResponseFor401(api_client.ApiResponse):
 _response_for_401 = api_client.LiteApiResponse(
     response_cls=ApiResponseFor401,
     content={
-        'application/json': api_client.MediaType(
+        'application/json; charset=utf-8': api_client.MediaType(
             schema=SchemaFor401ResponseBodyApplicationJson),
     },
     headers=[
-        access_control_allow_credentials_parameter,
-        access_control_allow_headers_parameter,
-        access_control_allow_methods_parameter,
-        access_control_allow_origin_parameter,
-        access_control_expose_headers_parameter,
-        access_control_max_age_parameter,
-        content_type_parameter,
         date_parameter,
+        content_type_parameter,
         content_length_parameter,
+        connection_parameter,
+        x_amzn_request_id_parameter,
+        access_control_allow_origin_parameter,
+        content_encoding_parameter,
+        access_control_allow_headers_parameter,
+        x_amzn_remapped_content_length_parameter,
+        x_amz_apigw_id_parameter,
+        access_control_allow_methods_parameter,
+        access_control_expose_headers_parameter,
+        x_amzn_remapped_date_parameter,
+        access_control_max_age_parameter,
+        access_control_allow_credentials_parameter,
     ]
 )
 _all_accept_content_types = (
-    'application/json',
+    'application/json; charset=utf-8',
 )
 
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _cancel_booking_oapg(
+    def _get_bookings_list_oapg(
         self,
-        path_params: RequestPathParams = frozendict.frozendict(),
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -297,19 +281,19 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _cancel_booking_oapg(
+    def _get_bookings_list_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        path_params: RequestPathParams = frozendict.frozendict(),
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _cancel_booking_oapg(
+    def _get_bookings_list_oapg(
         self,
-        path_params: RequestPathParams = frozendict.frozendict(),
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -320,35 +304,35 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _cancel_booking_oapg(
+    def _get_bookings_list_oapg(
         self,
-        path_params: RequestPathParams = frozendict.frozendict(),
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         """
-        Booking cancel
+        Booking list
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
-        self._verify_typed_dict_inputs_oapg(RequestPathParams, path_params)
+        self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
         used_path = path.value
 
-        _path_params = {}
+        prefix_separator_iterator = None
         for parameter in (
-            request_path_booking_id,
+            request_query_guest_id,
         ):
-            parameter_data = path_params.get(parameter.name, schemas.unset)
+            parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
                 continue
-            serialized_data = parameter.serialize(parameter_data)
-            _path_params.update(serialized_data)
-
-        for k, v in _path_params.items():
-            used_path = used_path.replace('{%s}' % k, v)
+            if prefix_separator_iterator is None:
+                prefix_separator_iterator = parameter.get_prefix_separator_iterator()
+            serialized_data = parameter.serialize(parameter_data, prefix_separator_iterator)
+            for serialized_value in serialized_data.values():
+                used_path += serialized_value
 
         _headers = HTTPHeaderDict()
         # TODO add cookie handling
@@ -358,7 +342,7 @@ class BaseApi(api_client.Api):
 
         response = self.api_client.call_api(
             resource_path=used_path,
-            method='put'.upper(),
+            method='get'.upper(),
             headers=_headers,
             auth_settings=_auth,
             stream=stream,
@@ -384,13 +368,13 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class BookingsBookingIdPut(BaseApi):
+class BookingsGet(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def cancel_booking_call(
+    def get_bookings_list_call(
         self,
-        path_params: RequestPathParams = frozendict.frozendict(),
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -401,19 +385,19 @@ class BookingsBookingIdPut(BaseApi):
     ]: ...
 
     @typing.overload
-    def cancel_booking_call(
+    def get_bookings_list_call(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        path_params: RequestPathParams = frozendict.frozendict(),
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def cancel_booking_call(
+    def get_bookings_list_call(
         self,
-        path_params: RequestPathParams = frozendict.frozendict(),
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -424,43 +408,43 @@ class BookingsBookingIdPut(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def cancel_booking_call(
+    def get_bookings_list_call(
         self,
-        path_params: RequestPathParams = frozendict.frozendict(),
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._cancel_booking_oapg(
-            path_params=path_params,
+        return self._get_bookings_list_oapg(
+            query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
 
-    def cancel_booking(self,bookingId):
+
+    def get_bookings_list_by_guestId(self,guestId):
         try:
             query_params = {
-                'bookingId': bookingId,
+                'guestId': guestId,
             }
-            api_response = self.cancel_booking_call(
+            api_response = self.get_bookings_list_call(
                 query_params=query_params,
             )
             return api_response.body
         except exceptions.ApiException as e:
-            return ("Exception when calling BookingManagementApi->retrieved_booking: %s\n" % e)
+            return ("Exception when calling BookingManagementApi->get_bookings_list_by_guestId: %s\n" % e)
 
 
-
-class ApiForput(BaseApi):
+class ApiForget(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names
 
     @typing.overload
-    def put(
+    def get(
         self,
-        path_params: RequestPathParams = frozendict.frozendict(),
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -471,19 +455,19 @@ class ApiForput(BaseApi):
     ]: ...
 
     @typing.overload
-    def put(
+    def get(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        path_params: RequestPathParams = frozendict.frozendict(),
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def put(
+    def get(
         self,
-        path_params: RequestPathParams = frozendict.frozendict(),
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -494,16 +478,16 @@ class ApiForput(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def put(
+    def get(
         self,
-        path_params: RequestPathParams = frozendict.frozendict(),
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._cancel_booking_oapg(
-            path_params=path_params,
+        return self._get_bookings_list_oapg(
+            query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,

@@ -470,22 +470,27 @@ class DataHotelsGet(BaseApi):
             self,
             countryCode: str,
             cityName: str,
-            offset: str,
-            limit: str,
-            longitude: str,
-            latitude: str,
-            distance: str
+            offset: str = None,
+            limit: str = None,
+            longitude: str = None,
+            latitude: str = None,
+            distance: str = None,
         ):
         try:
             query_params = {
                     'countryCode': countryCode,
                     'cityName': cityName,
-                    'offset': offset,
-                    'limit': limit,
-                    'longitude': longitude,
-                    'latitude': latitude,
-                    'distance': distance,
                 }
+            if offset is not None:
+                query_params['offset'] = offset
+            if limit is not None:
+                query_params['limit'] = limit
+            if longitude is not None:
+                query_params['longitude'] = longitude
+            if latitude is not None:
+                query_params['latitude'] = latitude
+            if distance is not None:
+                query_params['distance'] = distance
             
             api_response = self.get_hotels_call(
                 query_params=query_params

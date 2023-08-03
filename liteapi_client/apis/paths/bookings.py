@@ -1,4 +1,4 @@
-from liteapi_client.paths.bookings.get import ApiForget
+from liteapi_client.paths.bookings_list.get import ApiForget
 
 
 class Bookings(

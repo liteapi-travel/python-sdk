@@ -656,16 +656,18 @@ class GuestsGet(BaseApi):
 
     def get_guests(
             self,
-            email: str,
+            email: str = None,
         ):
         try:
-            query_params = {
-                    'email': email
+
+            if email is not None:
+                query_params = {
+                    'email': email,
                 }
-            
-            api_response = self.get_guests_call(
-                query_params=query_params
-            )
+                api_response = self.get_guests_call(query_params=query_params)
+            else:
+                api_response = self.get_guests_call()
+
             return api_response.body
         except exceptions.ApiException as e:
             return ("Exception when calling StaticDataApi->get_guests: %s\n" % e)

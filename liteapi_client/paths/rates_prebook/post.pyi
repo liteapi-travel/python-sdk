@@ -418,7 +418,7 @@ class RatesPrebookPost(BaseApi):
 
     def prebook_call(
         self,
-        content_type: str = 'application/json',
+        content_type: str = 'application/json; charset=utf-8',
         body: typing.Union[SchemaForRequestBodyApplicationJson, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
