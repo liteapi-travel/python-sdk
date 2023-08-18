@@ -1072,6 +1072,7 @@ class ApiClient:
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         host: typing.Optional[str] = None,
+        book=False
     ) -> urllib3.HTTPResponse:
         """Makes the HTTP request (synchronous) and returns deserialized data.
 
@@ -1106,6 +1107,8 @@ class ApiClient:
             If parameter async_req is False or missing,
             then the method will return the response directly.
         """
+        if book:
+            host = self.configuration.book_host
 
         if not async_req:
             return self.__call_api(

@@ -112,6 +112,8 @@ conf = liteapi_client.Configuration(
         """Constructor
         """
         self._base_path = "https://api.liteapi.travel/v2.0" if host is None else host
+        self._book_path = "https://book.liteapi.travel/v2.0" if host is None else host
+
         """Default Base url
         """
         self.server_index = 0 if server_index is None and host is None else server_index
@@ -412,11 +414,12 @@ conf = liteapi_client.Configuration(
         return [
             {
                 'url': "https://api.liteapi.travel/v2.0",
+                'book_url': "https://book.liteapi.travel/v2.0",
                 'description': "No description provided",
             }
         ]
 
-    def get_host_from_settings(self, index, variables=None, servers=None):
+    def get_host_from_settings(self, index, variables=None, servers=None, book=False):
         """Gets host URL based on the index and variables
         :param index: array index of the host settings
         :param variables: hash of variable and the corresponding value
@@ -436,8 +439,11 @@ conf = liteapi_client.Configuration(
                 "Invalid index {0} when selecting the host settings. "
                 "Must be less than {1}".format(index, len(servers)))
 
-        url = server['url']
-
+        url = ""
+        if book:
+            url = server['book_url']
+        else :
+            url = server['url']
         # go through variables and replace placeholders
         for variable_name, variable in server.get('variables', {}).items():
             used_value = variables.get(
@@ -459,9 +465,16 @@ conf = liteapi_client.Configuration(
     def host(self):
         """Return generated host."""
         return self.get_host_from_settings(self.server_index, variables=self.server_variables)
+    
+    @property
+    def book_host(self):
+        """Return generated host."""
+        return self.get_host_from_settings(self.server_index, variables=self.server_variables,book=True)
+
 
     @host.setter
     def host(self, value):
         """Fix base path."""
         self._base_path = value
+        self._book_path = value
         self.server_index = None

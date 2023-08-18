@@ -485,6 +485,7 @@ class BaseApi(api_client.Api):
             auth_settings=_auth,
             stream=stream,
             timeout=timeout,
+            book=True
         )
 
         if skip_deserialization:
