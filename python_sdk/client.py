@@ -1,5 +1,3 @@
-# python_sdk/client.py
-
 import requests
 from typing import Any, Dict, Optional
 
@@ -36,6 +34,6 @@ class LiteApiClient:
         url = f"{self.service_url}{endpoint}"
         return self._make_request(url, method='GET', params=params)
 
-    def post(self, endpoint: str, data: Optional[Dict] = None) -> Dict[str, Any]:
+    def post(self, endpoint: str, data: Optional[Dict] = None, headers: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
         url = f"{self.service_url}{endpoint}"
-        return self._make_request(url, method='POST', data=data)
+        return self._make_request(url, method='POST', data=data, headers=headers)

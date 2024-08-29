@@ -13,11 +13,12 @@ class GetHotelReviewsApi:
         limit: Optional[int] = 200,
         timeout: Optional[float] = 4.0
     ) -> Dict[str, Any]:
-        endpoint = f"{self.client.base_url}/data/reviews"
+        endpoint = f"{self.client.service_url}/data/reviews"
         params = {
             "hotelId": hotel_id,
             "limit": limit,
             "timeout": timeout
         }
 
-        return self.client.get(endpoint, params=params)
+        response = self.client.get(endpoint, params=params)
+        return response

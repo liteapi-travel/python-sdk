@@ -11,9 +11,10 @@ class GetCurrenciesApi:
         self,
         timeout: Optional[float] = 4.0
     ) -> Dict[str, Any]:
-        endpoint = f"{self.client.base_url}/data/currencies"
+        endpoint = f"{self.client.service_url}/data/currencies"
         params = {
             "timeout": timeout
         }
 
-        return self.client.get(endpoint, params=params)
+        response = self.client.get(endpoint, params=params)
+        return response

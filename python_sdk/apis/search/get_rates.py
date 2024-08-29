@@ -1,3 +1,5 @@
+# python_sdk/apis/search/get_rates.py
+
 from typing import List, Dict, Any, Optional
 from python_sdk.client import LiteApiClient
 
@@ -35,7 +37,7 @@ class GetRatesApi:
         facilities: Optional[List[int]] = None,
         strict_facility_filtering: Optional[bool] = False
     ) -> Dict[str, Any]:
-        endpoint = f"{self.client.base_url}/hotels/rates"
+        endpoint = f"{self.client.service_url}/hotels/rates"
         payload = {
             "hotelIds": hotel_ids,
             "occupancies": occupancies,
@@ -45,54 +47,26 @@ class GetRatesApi:
             "guestNationality": guest_nationality,
             "timeout": timeout,
             "roomMapping": room_mapping,
+            "hotelName": hotel_name,
+            "countryCode": country_code,
+            "cityName": city_name,
+            "latitude": latitude,
+            "longitude": longitude,
+            "radius": radius,
+            "iataCode": iata_code,
+            "limit": limit,
+            "offset": offset,
+            "aiSearch": ai_search,
+            "minReviewsCount": min_reviews_count,
+            "minRating": min_rating,
+            "zip": zip_code,
+            "placeId": place_id,
+            "starRating": star_rating,
+            "hotelTypeIds": hotel_type_ids,
+            "chainIds": chain_ids,
+            "facilities": facilities,
+            "strictFacilityFiltering": strict_facility_filtering
         }
 
-        # Add optional parameters to the payload if they are provided
-        if hotel_name:
-            payload["hotelName"] = hotel_name
-        if country_code:
-            payload["countryCode"] = country_code
-        if city_name:
-            payload["cityName"] = city_name
-        if latitude:
-            payload["latitude"] = latitude
-        if longitude:
-            payload["longitude"] = longitude
-        if radius:
-            payload["radius"] = radius
-        if iata_code:
-            payload["iataCode"] = iata_code
-        if limit:
-            payload["limit"] = limit
-        if offset:
-            payload["offset"] = offset
-        if ai_search:
-            payload["aiSearch"] = ai_search
-        if min_reviews_count:
-            payload["minReviewsCount"] = min_reviews_count
-        if min_rating:
-            payload["minRating"] = min_rating
-        if zip_code:
-            payload["zip"] = zip_code
-        if place_id:
-            payload["placeId"] = place_id
-        if star_rating:
-            payload["starRating"] = star_rating
-        if hotel_type_ids:
-            payload["hotelTypeIds"] = hotel_type_ids
-        if chain_ids:
-            payload["chainIds"] = chain_ids
-        if facilities:
-            payload["facilities"] = facilities
-        if strict_facility_filtering:
-            payload["strictFacilityFiltering"] = strict_facility_filtering
-
-        headers = {
-            "accept": "application/json",
-            "content-type": "application/json",
-            "X-API-Key": self.client.api_key
-        }
-
-        response = self.client.post(endpoint, json=payload, headers=headers)
-
-        return response.json()
+        response = self.client.post(endpoint, data=payload)
+        return response

@@ -12,24 +12,12 @@ class RetrieveBookingApi:
         booking_id: str,
         timeout: Optional[float] = 4.0
     ) -> Dict[str, Any]:
-        """
-        Retrieve a booking by its unique booking ID.
-
-        :param booking_id: The unique identifier of the booking to retrieve.
-        :param timeout: Request timeout in seconds.
-        :return: JSON response containing the booking details.
-        """
-
-        endpoint = f"{self.client.base_url}/bookings/{booking_id}"
+    
+        endpoint = f"{self.client.book_service_url}/bookings/{booking_id}"
         params = {
             "timeout": timeout,
         }
 
-        headers = {
-            "accept": "application/json",
-            "X-API-Key": self.client.api_key
-        }
+        response = self.client.get(endpoint, params=params)
 
-        response = self.client.get(endpoint, params=params, headers=headers)
-
-        return response.json()
+        return response

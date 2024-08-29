@@ -1,4 +1,4 @@
-# Python-sdk-v2
+# Python-sdk
 
 <h1 style="font-weight: 500;">liteAPI SDK</h1>
 
@@ -27,6 +27,9 @@
     - [Booking list](#booking-list)
     - [Booking retrieve](#booking-retrieve)
     - [Booking cancel](#booking-cancel)
+  - [Vouchers](#vouchers)
+    - [Voucher Details](#voucher-details)
+    - [Loyalty Program](#loyalty-program)
 - [Example Project](#example-project)
 
 # Introduction
@@ -49,6 +52,10 @@ LiteAPI opens up a range of powerful functions for travel and hospitality applic
 <h3 style="font-weight: 500; display:inline">Booking Management:</h3> With LiteAPI, managing bookings becomes a straightforward task. The booking management functions allow for the tracking and management of all bookings made through the app, ensuring users can keep track of their travel plans.
 <br><br>
 <h3 style="font-weight: 500; display:inline">Booking Retrieval and Cancellation:</h3> Lastly, LiteAPI offers the capability to retrieve and cancel existing bookings. This added flexibility is crucial for users who might need to alter their travel plans.
+<br><br>
+<h3 style="font-weight: 500; display:inline">Vouchers:</h3> LiteAPI allows developers to manage and retrieve vouchers, adding an extra layer of value to users by offering discounts or special offers through the app.
+<br><br>
+<h3 style="font-weight: 500; display:inline">Loyalty Program:</h3> A comprehensive loyalty system within liteAPI, which includes guest tracking, loyalty points accrual, and retrieval of guest booking history and information via a unique guestId.
 <br><br>
 All these features make LiteAPI a comprehensive solution for travel app development, offering a plethora of functionalities, from search and booking to management and cancellation. Developers can harness these powerful tools to create high-quality, user-friendly travel applications.
 <br><br>

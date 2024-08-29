@@ -1,5 +1,3 @@
-# python_sdk/apis/bookings/make_booking/book.py
-
 from typing import Dict, Any, List, Optional
 from python_sdk.client import LiteApiClient
 
@@ -18,7 +16,7 @@ class BookApi:
         voucher_code: Optional[str] = None
     ) -> Dict[str, Any]:
         
-        endpoint = f"{self.client.base_url}/rates/book"
+        endpoint = f"{self.client.book_service_url}/rates/book"
         payload = {
             "prebookId": prebook_id,
             "clientReference": client_reference,
@@ -41,6 +39,6 @@ class BookApi:
             "X-API-Key": self.client.api_key
         }
 
-        response = self.client.post(endpoint, json=payload, headers=headers)
+        response = self.client.post(endpoint, data=payload, headers=headers)
 
-        return response.json()
+        return response

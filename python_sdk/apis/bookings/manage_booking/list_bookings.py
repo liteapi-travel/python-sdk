@@ -12,8 +12,8 @@ class ListBookingsApi:
         client_reference: Optional[str] = None,
         timeout: Optional[float] = 4.0
     ) -> Dict[str, Any]:
-       
-        endpoint = f"{self.client.base_url}/bookings"
+
+        endpoint = f"{self.client.book_service_url}/bookings"
         params = {
             "timeout": timeout,
         }
@@ -21,11 +21,6 @@ class ListBookingsApi:
         if client_reference:
             params["clientReference"] = client_reference
 
-        headers = {
-            "accept": "application/json",
-            "X-API-Key": self.client.api_key
-        }
+        response = self.client.get(endpoint, params=params)
 
-        response = self.client.get(endpoint, params=params, headers=headers)
-
-        return response.json()
+        return response

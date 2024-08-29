@@ -8,19 +8,7 @@ class GetVoucherByIdApi:
         self.client = client
 
     def retrieve_voucher_by_id(self, voucher_id: int) -> Dict[str, Any]:
-        """
-        Fetch detailed information about a specific voucher using its unique identifier.
-        This includes the voucher code, discount details, usage limits, and more.
+        endpoint = f"{self.client.service_url}/vouchers/{voucher_id}"
+        response = self.client.get(endpoint)
+        return response
 
-        :param voucher_id: The unique identifier of the voucher to retrieve.
-        :return: JSON response containing the voucher details.
-        """
-        endpoint = f"{self.client.base_url}/vouchers/{voucher_id}"
-        headers = {
-            "accept": "application/json",
-            "X-API-Key": self.client.api_key
-        }
-
-        response = self.client.get(endpoint, headers=headers)
-
-        return response.json()

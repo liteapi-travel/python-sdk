@@ -29,7 +29,8 @@ class GetHotelsApi:
         star_rating: Optional[str] = None,
         place_id: Optional[str] = None
     ) -> Dict[str, Any]:
-        endpoint = f"{self.client.base_url}/data/hotels"
+      
+        endpoint = f"{self.client.service_url}/data/hotels"
         params = {
             "countryCode": country_code,
             "cityName": city_name,
@@ -54,4 +55,6 @@ class GetHotelsApi:
 
         params = {key: value for key, value in params.items() if value is not None}
 
-        return self.client.get(endpoint, params=params)
+        response = self.client.get(endpoint, params=params)
+        return response
+

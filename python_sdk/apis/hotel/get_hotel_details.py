@@ -12,10 +12,11 @@ class GetHotelDetailsApi:
         hotel_id: str,
         timeout: Optional[float] = 4.0
     ) -> Dict[str, Any]:
-        endpoint = f"{self.client.base_url}/data/hotel"
+        endpoint = f"{self.client.service_url}/data/hotel"
         params = {
             "hotelId": hotel_id,
             "timeout": timeout
         }
 
-        return self.client.get(endpoint, params=params)
+        response = self.client.get(endpoint, params=params)
+        return response

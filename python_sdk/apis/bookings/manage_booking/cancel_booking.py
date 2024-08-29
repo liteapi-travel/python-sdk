@@ -12,24 +12,13 @@ class CancelBookingApi:
         booking_id: str,
         timeout: Optional[float] = 4.0
     ) -> Dict[str, Any]:
-        """
-        Request a cancellation of an existing confirmed booking.
+         
+        endpoint = f"{self.client.book_service_url}/bookings/{booking_id}"
 
-        :param booking_id: The unique identifier of the booking to cancel.
-        :param timeout: Request timeout in seconds.
-        :return: JSON response containing the cancellation status.
-        """
-
-        endpoint = f"{self.client.base_url}/bookings/{booking_id}"
         params = {
             "timeout": timeout,
         }
 
-        headers = {
-            "accept": "application/json",
-            "X-API-Key": self.client.api_key
-        }
+        response = self.client.post(endpoint, data=params)
 
-        response = self.client.put(endpoint, params=params, headers=headers)
-
-        return response.json()
+        return response

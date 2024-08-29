@@ -11,9 +11,10 @@ class GetIataCodesApi:
         self,
         timeout: Optional[float] = 4.0
     ) -> Dict[str, Any]:
-        endpoint = f"{self.client.base_url}/data/iataCodes"
+        endpoint = f"{self.client.service_url}/data/iataCodes"
         params = {
             "timeout": timeout
         }
 
-        return self.client.get(endpoint, params=params)
+        response = self.client.get(endpoint, params=params)
+        return response

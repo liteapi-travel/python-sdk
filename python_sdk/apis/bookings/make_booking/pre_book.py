@@ -14,7 +14,7 @@ class PreBookApi:
         voucher_code: Optional[str] = None
     ) -> Dict[str, Any]:
        
-        endpoint = f"{self.client.base_url}/rates/prebook"
+        endpoint = f"{self.client.book_service_url}/rates/prebook"
         payload = {
             "offerId": offer_id,
             "usePaymentSdk": use_payment_sdk
@@ -29,6 +29,6 @@ class PreBookApi:
             "X-API-Key": self.client.api_key
         }
 
-        response = self.client.post(endpoint, json=payload, headers=headers)
+        response = self.client.post(endpoint, data=payload, headers=headers)
 
-        return response.json()
+        return response
