@@ -1,3 +1,5 @@
+# python_sdk/apis/bookings/make_booking/book.py
+
 from typing import Dict, Any, List, Optional
 from python_sdk.client import LiteApiClient
 

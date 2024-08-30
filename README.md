@@ -18,8 +18,7 @@
   - [IATA code list](#iata-code-list)
 - [Booking flow](#booking-flow)
   - [Search](#search)
-    - [Minimum Rates availability](#minimum-rates-availability)
-    - [Hotel full rates availability](#hotel-full-rates-availability)
+    - [Retrieve rates for hotels](#hotel-full-rates-availability)
   - [Book](#book)
     - [Hotel rate prebook](#hotel-rate-prebook)
     - [Hotel rate book](#hotel-rate-book)
@@ -27,8 +26,9 @@
     - [Booking list](#booking-list)
     - [Booking retrieve](#booking-retrieve)
     - [Booking cancel](#booking-cancel)
-  - [Vouchers](#vouchers)
-    - [Voucher Details](#voucher-details)
+  - [Vouchers and loyalty](#vouchers)
+    - [Vouchers](#voucher-details)
+    - [VoucherID](#voucher-details)
     - [Loyalty Program](#loyalty-program)
 - [Example Project](#example-project)
 
@@ -83,11 +83,14 @@ pip install git+https://github.com/liteapi-travel/python-sdk.git
 After you have installed the LiteAPI package, you need to configure it with your API key. The API key is available in the [liteAPI Dashboard](https://dashboard.liteapi.travel/apikeys/). Here's the step to add the API key to the package.
 
 ```python
-    import liteapi_client
+# Step 1: Initialize the client with your API key
+client = LiteApiClient(api_key="your_api_key")
 
-    configuration = liteapi_client.Configuration(
-        api_key='YOUR_API_KEY'
-    )
+# Usage example for any API endpoint
+# For instance, using GetCurrenciesApi as an example:
+currencies_api = GetCurrenciesApi(client)
+response = currencies_api.get_currencies()
+print(response)
 ```
 
 # Static data
@@ -97,11 +100,19 @@ Static data can be directly fetched from the functions below. Alternatively, Lit
 To fetch static data from the functions, you need to create an instance of the StaticDataApi as follows:
 
 ```python
-    import liteapi_client
-    from liteapi_client.apis.tags import static_data_api
+  # Initialize the client with your API key
+client = LiteApiClient(api_key="your_api_key")  # Replace "your_api_key" with your actual API key
 
-    with liteapi_client.ApiClient(configuration) as api_client:
-        static_data_instance = static_data_api.StaticDataApi(api_client)
+# Create an instance of StaticDataApi
+static_data_api = StaticDataApi(client)
+
+# Fetch the list of countries
+response_countries = static_data_api.get_countries()
+print(response_countries)
+
+# Fetch the list of cities by country code
+response_cities = static_data_api.get_cities_by_country_code(country_code="IT")
+print(response_cities)
 ```
 ## List of cities
 
@@ -109,8 +120,14 @@ The get_cities function returns a list of city names from a specific country. Th
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    countryCode = "US",
-    result = static_data_instance.get_cities(countryCode)
+client = LiteApiClient(api_key="your_api_key")  
+
+cities_api = GetCitiesByCountryCodeApi(client)
+
+country_code = "US"  # Example country code in ISO-2 format
+result = cities_api.get_cities_by_country_code(country_code)
+
+print(result)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
@@ -118,6 +135,7 @@ The get_cities function returns a list of city names from a specific country. Th
 | Name            | Type       | Description                                | Notes      |
 | --------------- | ---------- | ------------------------------------------ | ---------- |
 | **countryCode** | **String** | Country code in iso-2 format (example: US) | [required] |
+| **timeout**     | **Float**  | Request timeout in seconds (default: 4.0)	| [optional] |
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
 
@@ -135,11 +153,15 @@ The get_countries function returns the list of countries available along with it
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    result = static_data_instance.get_countries()
+client = LiteApiClient(api_key="your_api_key")  
+
+countries_api = GetCountriesApi(client)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
-The function does not need any additional parameter.
+| Name            | Type       | Description                                | Notes      |
+| --------------- | ---------- | ------------------------------------------ | ---------- |
+| **timeout**     | **Float**  | Request timeout in seconds (default: 4.0)	| [optional] |
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
 
@@ -158,11 +180,13 @@ The get_currencies function returns all available currency codes along with its 
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    result = static_data_instance.get_currencies()
+currencies_api = GetCurrenciesApi(client)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
-This function does not need any additional parameters.
+| Name            | Type       | Description                                | Notes      |
+| --------------- | ---------- | ------------------------------------------ | ---------- |
+| **timeout**     | **Float**  | Request timeout in seconds (default: 4.0)	| [optional] |
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
 
@@ -182,25 +206,32 @@ The get_hotels function returns a list of hotels available based on different se
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    countryCode = "IT"
-    cityName = "Rome"
-
-    result = static_data_instance.get_hotels(countryCode=countryCode, cityName=cityName)
+country_code = "IT"
+city_name = "Rome"
+result = hotels_api.get_hotels(country_code=country_code, city_name=city_name)
 ```
 
 To utilize optional values, you can invoke the function as follows:
 
 ```python
-    countryCode = "IT"
-    cityName = "Rome"
-    #Optional values
-    offset = 10
-    limit = 100
-    longitude = "-115.16988"
-    latitude = "36.12510"
-    distance = 1000
-    result = static_data_instance.get_hotels(countryCode=countryCode, cityName=cityName,
-                                           offset=offset, limit=limit, longitude=longitude, latitude=latitude, distance=distance)
+   country_code = "IT"
+city_name = "Rome"
+offset = 10
+limit = 100
+longitude = -115.16988
+latitude = 36.12510
+radius = 1000
+result = hotels_api.get_hotels(
+    country_code=country_code,
+    city_name=city_name,
+    offset=offset,
+    limit=limit,
+    longitude=longitude,
+    latitude=latitude,
+    radius=radius
+)
+# Print the result
+print(result)
 ```
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
@@ -208,12 +239,25 @@ To utilize optional values, you can invoke the function as follows:
 | Name            | Type       | Description                                                         | Notes      |
 | --------------- | ---------- | ------------------------------------------------------------------- | ---------- |
 | **countryCode** | **String** | country code ISO-2 code - example (US)                              | [required] |
-| **cityName**    | **String** | name of the city                                                    | [required] |
+| **cityName**    | **String** | name of the city                                                    | [optional] |
+| **hotel_name**  | **String** | Name of the hotel	                                                 | [optional] |
 | **offset**      | **Integer** | specifies the number of rows to skip before starting to return rows | [optional] |
-| **limit**       | **Integer** | limit number of results (max 1000)                                  | [optional] |
+| **limit**       | **Integer** | limit number of results (max 1000)                                 | [optional] |
 | **longitude**   | **String** | longitude geo coordinates                                           | [optional] |
 | **latitude**    | **String** | latitude geo coordinates                                            | [optional] |
-| **distance**    | **Integer** | distance in meters (min 1000m)                                      | [optional] |
+| **radius**      | **Integer** | Search radius in meters                                            | [optional] |
+| **ai_search**   | **String** | AI-based search paramete                                            | [optional] |
+| **timeout**     | **Float** | Request timeout in seconds                                           | [optional] |
+| **zip_code**    | **String** | Postal code filter                                                  | [optional] |
+| **min_rating**  | **Float** | Minimum rating of hotels to be returned                              | [optional] |
+| **min_reviews_count** | **Integer** | Minimum number of reviews for the hotels                     | [optional] |
+| **facility_ids** | **String** | Facility IDs to filter hotels	                                     | [optional] |
+| **hotel_type_ids** | **String** | Hotel type IDs to filter hotels                                  | [optional] |
+| **chain_ids** | **String** | Hotel chain IDs to filter hotels	                                     | [optional] |
+| **strict_facilities_filtering** | **Bool** | Strictly filter by facil                              | [optional] |
+| **star_rating** | **String** | Star rating of hotels to filter by	                                 | [optional] |
+| **place_id** | **String** | Place ID for specific searches	                                     | [optional] |
+
 
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
@@ -244,12 +288,13 @@ The get_hotel_details function returns all the static contents details of a hote
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
     hotelId =  "lp24373"
-    result = static_data_instance.get_hotel_details(hotelId)
+    result = hotel_details_api.get_hotel_details(hotel_id)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 | Name        | Type       | Description          | Notes      |
 | ----------- | ---------- | -------------------- | ---------- |
 | **hotelId** | **String** | Unique ID of a hotel | [required] |
+| **timeout** | **Float**  | Request timeout in seconds (default: 4.0)	 | [optional] |
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
 
@@ -288,11 +333,13 @@ The get_iata_codes function returns the IATA (International Air Transport Associ
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    result = static_data_instance.get_iata_codes()
+    iata_codes_api = GetIataCodesApi(client)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
-This function does not need any additional parameters.
+| Name        | Type       | Description                                 | Notes      |
+| ----------- | ---------- | ------------------------------------------- | ---------- |
+| **timeout** | **Float**  | Request timeout in seconds (default: 4.0)	 | [optional] |
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
 
@@ -320,109 +367,58 @@ booking management.
 To access the search functionality and retrieve available hotels, you need to create an instance of the SearchApi as follows:
 
 ```python
-    import liteapi_client
-    from liteapi_client.apis.tags import search_api
-
-    with liteapi_client.ApiClient(configuration) as api_client:
-        search_instance = search_api.SearchApi(api_client)
+from python_sdk.client import LiteApiClient
+from python_sdk.apis.search.get_rates import GetRatesApi
 ```
 
-### Minimum Rates availability
+### Retrieve rates for hotels
 ------
-The get_minimum_rates function is used to retrieve the minimum room rates that are available for a list of hotel ID's on the specified search dates.
+This endpoint allows developers to retrieve detailed rate information for hotels, supporting multi-room bookings. By making a POST request with the required parameters, you receive an array of offers, each containing comprehensive rate details. This endpoint is essential for providing users with detailed booking options, including pricing and room specifications.
 
-For each hotel ID, the minimum room rate that is available is returned.
+The request requires an array of hotelIds (up to 200 per request), checkin, checkout, and an array of occupancies objects. Each occupancy object specifies the number of adults and ages of children for each room requested.
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    hotelIds =["lp3803c", "lp1f982", "lp19b70","lp19e75"]
-    checkin = "2023-11-15"
-    checkout = "2023-11-16"
-    currency = "USD"
-    guestNationality = "US"
-    adults = 1
+    hotel_ids = ["lp3803c", "lp1f982", "lp19b70", "lp19e75"]
+checkin = "2023-11-15"
+checkout = "2023-11-16"
+currency = "USD"
+guest_nationality = "US"
+adults = 1
 
-    result = search_instance.get_minimum_rates(hotelIds=hotelIds, checkin=checkin, checkout=checkout,
-                                                       currency=currency, guestNationality=guestNationality, adults=adults)  
-```
+# Fetch full rates with required parameters
+result = search_instance.get_rates(
+    hotel_ids=hotel_ids,
+    occupancies=[{"adults": adults}],
+    checkin=checkin,
+    checkout=checkout,
+    currency=currency,
+    guest_nationality=guest_nationality
+)
 
-To utilize optional values, you can invoke the function as follows:
-
-```python
-    hotelIds =["lp3803c", "lp1f982", "lp19b70","lp19e75"]
-    checkin = "2023-11-15"
-    checkout = "2023-11-16"
-    currency = "USD"
-    guestNationality = "US"
-    adults = 1
-    #Optional values
-    children = [12,9]
-    guestId = "traveler1"
-
-    api_response = search_instance.get_minimum_rates(hotelIds=hotelIds, checkin=checkin, checkout=checkout,
-                                                      currency=currency, guestNationality=guestNationality, adults=adults, children=children, guestId=guestId)
-```
-
-*  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **hotelIds** | **array of Strings**| List of hotelIds | [required]
- **checkin** | **String**| Check in data in YYYY-MM-DD format | [required]
- **checkout** | **String**| Check out data in YYYY-MM-DD format | [required]
- **currency** | **String**| Currency code - example (USD) | [required]
- **guestNationality** | **string**| Guest nationality ISO-2 code - example (SG) | [required]
- **adults** | **Integer**| Number of adult guests staying | [required]
- **children** | **array of Integers**| Number of children staying if any | [optional] 
- **guestId** | **String**| Unique traveler ID if available | [optional] 
-
-*  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
-
-An array of hotel minimum rates objects with the following properties:
-
-| Name         | Type   | Description                                      |
-| ------------ | ------ | ------------------------------------------------ |
-| **hotelId**    | **String** | The ID of the hotel.                             |
-| **currency**   | **String** | The currency code for the price.                  |
-| **price**      | **number** | The price of the hotel.                           |
-| **supplierId** | **number** | The ID of the supplier.                           |
-| **supplier**   | **String** | The name of the supplier.                         |
-
-
-<br>
-
-
-### Hotel full rates availability
-------
-The get_full_rates function return the rates of all available rooms along with its cancellation policies for a list of hotel ID's based on the search dates.
-
-*  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
-```python
-    hotelIds =["lp3803c", "lp1f982", "lp19b70","lp19e75"]
-    checkin = "2023-11-15"
-    checkout = "2023-11-16"
-    currency = "USD"
-    guestNationality = "US"
-    adults = 1
-
-    result = search_instance.get_full_rates(hotelIds=hotelIds, checkin=checkin, checkout=checkout,
-                                                       currency=currency, guestNationality=guestNationality, adults=adults)
+# Print the result
+print(result)
 ```
 
 To exclude the optional values, you can simply set them to null in the function call:
 ```python
-    hotelIds =["lp3803c", "lp1f982", "lp19b70","lp19e75"]
-    checkin = "2023-11-15"
-    checkout = "2023-11-16"
-    currency = "USD"
-    guestNationality = "US"
-    adults = 1
-    #Optional values
-    children = [12,9]
-    guestId = "traveler1"
+   children = [12, 9]
+guest_id = "traveler1"
 
-    api_response = search_instance.get_full_rates(hotelIds=hotelIds, checkin=checkin, checkout=checkout,
-                                                      currency=currency, guestNationality=guestNationality, adults=adults, children=children, guestId=guestId)
+# Fetch full rates with optional parameters
+result = search_instance.get_rates(
+    hotel_ids=hotel_ids,
+    occupancies=[{"adults": adults, "children": children}],
+    checkin=checkin,
+    checkout=checkout,
+    currency=currency,
+    guest_nationality=guest_nationality,
+    timeout=10,
+    guest_id=guest_id
+)
+
+# Print the result
+print(result)
 ```
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
@@ -437,6 +433,7 @@ Name | Type | Description  | Notes
  **adults** | **Integer**| Number of adult guests staying | [required]
  **children** | **array of Integers**| Number of children staying if any | [optional] 
  **guestId** | **String**| Unique traveler ID if available | [optional] 
+  **timeout** | **Float**| Request timeout in seconds (default: 4.0).	 | [optional] 
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
 
@@ -472,29 +469,37 @@ An array of hotel full rates with the following properties:
 To perform pre booking and booking operations, you need to create an instance of the BookApi as follows:
 
 ```python
-    import liteapi_client
-    from liteapi_client.apis.tags import book_api
+from python_sdk.client import LiteApiClient
+from python_sdk.apis.bookings.make_booking.pre_book import PreBookApi
+from python_sdk.apis.bookings.make_booking.book import BookApi
 
-    with liteapi_client.ApiClient(configuration) as api_client:
-        book_instance = book_api.BookApi(api_client)
+client = LiteApiClient(api_key="your_api_key")  
+
+prebook_instance = PreBookApi(client)
+book_instance = BookApi(client)
 ```
 
 ### Hotel rate prebook
 ------
 
-The prebook function is used to confirm if the room rates are still available before a booking function can be called. The input to the function is a specific rate Id coming from the getFullRates function.
-The function returns a prebook Id, a new rate Id and also contains information if the price, cancellation policy or boarding information changed.
-
+This endpoint is used to generate a checkout session for a specific offerId. The input to the endpoint is the specific offerId coming from Retrieve rates for hotels endpoint.
+The response will include a prebookId which is used to confirm the booking in the next step.
+The usePaymentSdk parameter is used to determine if the payment form will be displayed using the client-side Payment SDK or not.
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    rateId = "NRYDGOBQGNRXYMRQGIZS2MJRFUYTK7BSGAZDGLJRGEWTCNT4GF6HYVKTPRDVKM2UKFHFUUSHJEZUGR2OJJKEMWKZKRAU2QSRI5AVSQ2HJZFFQSCBGNKEGTKSK5GDIWSEJFHFUVKHIVNEIR2OKJIUYNCZKY3E2QZXI5AVEVCLJZNFSRZULFJUOVSLKR6FKU2EPR6HYOBVFYYTA7D4IJHXYNJXHA3TC7BR"
-    result = book_instance.prebook(rateId)
+    offer_id = "NRYDGOBQGNRXYMRQGIZS2MJRFUYTK7BSGAZDGLJRGEWTCNT4GF6HYVKTPRDVKM2UKFHFUUSHJEZUGR2OJJKEMWKZKRAU2QSRI5AVSQ2HJZFFQSCBGNKEGTKSK5GDIWSEJFHFUVKHIVNEIR2OKJIUYNCZKY3E2QZXI5AVEVCLJZNFSRZULFJUOVSLKR6FKU2EPR6HYOBVFYYTA7D4IJHXYNJXHA3TC7BR"
+use_payment_sdk = False
+
+result = prebook_instance.create_checkout_session(offer_id=offer_id, use_payment_sdk=use_payment_sdk)
+print(result)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-**rateId** | **String**| rate id retrieved from getFullRates response| [required]
+**offer_id** | **String**| Offer ID retrieved from the get_full_rates response| [required]
+**use_payment_sdk** | **Bool**| Boolean to indicate whether to use the payment SDK.| [required]
+**rvoucher_code** | **String**| Voucher code for discounts (if available).| [optional]
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
 
@@ -539,50 +544,64 @@ An object containing prebook information and room type details.
 ### Hotel rate book
 ------
 
-The book function confirms a booking when the prebook Id and the rate Id from the pre book stage along with the guest and payment information are passeed.
+This API confirms a booking when the prebookId and the rate Id from the prebook stage along with the guest and payment information are passed.
 
 The guest information is an object that should include the guest first name, last name and email.
 
-The payment information is an object that should include the name, credit card number, expiry and CVC number.
+The payment information can be two different options:
 
+TRANSACTION method: when using the Payment SDK, you should use this method and provide the relevant transactionId to confirm.
+ACC_CREDIT_CARD, WALLET, NONE for all other usages. See our docs for more details.
 The response will confirm the booking along with a booking Id and a hotel confirmation code. It will also include the booking details including the dates, price and the cancellation policies.
 
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 
 ```python
-    prebookId = "Qh1l16Tiu"
-    guestFirstName = "Kim"
-    guestLastName = "James"
-    guestEmail = "test@nlite.ml"
+    prebook_id = "Qh1l16Tiu"
+client_reference = "client123"
+holder = {
+    "firstName": "Kim",
+    "lastName": "James",
+    "email": "test@nlite.ml"
+}
+guests = [
+    {
+        "firstName": "Kim",
+        "lastName": "James",
+        "email": "test@nlite.ml"
+    }
+]
+payment_method = "CREDIT_CARD"
 
-    holderName = "Kim James"
-    paymentMethod = "CREDIT_CARD"
-    cardNumber = "4242424242424242"
-    expireMonth = "11"
-    expireYear = "23"
-    cvc = "123"
-
-    result = book_instance.book(prebookId=prebookId, guestFirstName=guestFirstName, guestLastName=guestLastName, guestEmail=guestEmail,
-                                     holderName=holderName, paymentMethod=paymentMethod, cardNumber=cardNumber, expireMonth=expireMonth, 
-                                     expireYear=expireYear, cvc=cvc)
+# Complete booking with credit card details
+result = book_instance.complete_booking(
+    prebook_id=prebook_id,
+    client_reference=client_reference,
+    holder=holder,
+    guests=guests,
+    payment_method=payment_method,
+    transaction_id=None
+)
+print(result)
 ```
 
 If you prefer to use a Stripe token, you can invoke the function in the following manner:
 
 ```python
-    prebookId = "Qh1l16Tiu"
-    guestFirstName = "Kim"
-    guestLastName = "James"
-    guestEmail = "test@nlite.ml"
+   payment_method = "STRIPE_TOKEN"
+transaction_id = "G4WTCNT4GJ6HYVKTPRDVSWSEJVMVUV2"
 
-    holderName = "Kim James"
-    paymentMethod = "CREDIT_CARD"
-    token = "G4WTCNT4GJ6HYVKTPRDVSWSEJVMVUV2"
-
-
-    result = book_instance.book(prebookId=prebookId, guestFirstName=guestFirstName, guestLastName=guestLastName, guestEmail=guestEmail,
-                                     holderName=holderName, paymentMethod=paymentMethod, token=token)
+# Complete booking with Stripe token
+result = book_instance.complete_booking(
+    prebook_id=prebook_id,
+    client_reference=client_reference,
+    holder=holder,
+    guests=guests,
+    payment_method=payment_method,
+    transaction_id=transaction_id
+)
+print(result)
 ```
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
@@ -590,18 +609,13 @@ If you prefer to use a Stripe token, you can invoke the function in the followin
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **prebookId** | **String**| prebook id retrieved from prebook response| [required]
-**guestInfo** | **object**| traveler informations| [required]|
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **guestFirstName** | **String**| traveler first name | [required]|
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **guestLastName** | **String**| traveler last name | [required]|
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **guestEmail** | **String**| traveler email | [required]|
-**paymentMethod** | **String**| methodEnum: "CREDIT_CARD" or "STRIPE_TOKEN" | [required]
+**client_reference** | **String**| Client reference for the booking| [required]|
+**holder** | **Object**| An object containing the guest's details (first name, last name, email) | [required]
 **holderName** | **String**| name of the cardholder	| [required]
-**paymentInfo** | **object**| payment informations | [required]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **card_number** | **String**| the card number associated with the credit card| [required if paymentMethod is CREDIT_CARD] 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **exp_month** | **String**| the expiration month of the credit card | [required if paymentMethod is CREDIT_CARD] 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **exp_year** | **String**| the expiration year of the credit card | [required if paymentMethod is CREDIT_CARD] 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **cvc** | **Integer**| the card verification code (CVC) associated with the credit card | [required if paymentMethod is CREDIT_CARD] 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **token** | **String**| token provided by Stripe for the payment method. | [required if paymentMethod is STRIPE_TOKEN] 
+**guests** | **Array**| List of guest objects containing guest details. | [required]
+**payment_method** | **String**| Payment method, either "CREDIT_CARD" or "STRIPE_TOKEN" | [required]
+**transaction_id** | **String**| Transaction ID or Stripe token (required if payment method is "STRIPE_TOKEN") | [optional]
+**voucher_code** | **String**| Voucher code for discounts (if available) | [required]
 
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
@@ -648,11 +662,16 @@ An object containing booking information and room details.
 To manage bookings to perform various operations such as retrieving a list of bookings, fetching details of a specific booking, and cancelling a booking, you need to create an instance of the BookingManagementApi instance as follows:
 
 ```python
-    import liteapi_client
-    from liteapi_client.apis.tags import booking_management_api
+from python_sdk.client import LiteApiClient
+from python_sdk.apis.bookings.manage_booking.list_bookings import ListBookingsApi
+from python_sdk.apis.bookings.manage_booking.retrieve_booking import RetrieveBookingApi
+from python_sdk.apis.bookings.manage_booking.cancel_booking import CancelBookingApi
 
-    with liteapi_client.ApiClient(configuration) as api_client:
-        booking_management_instance = booking_management_api.BookingManagementApi(api_client)
+client = LiteApiClient(api_key="your_api_key")  
+
+list_bookings_instance = ListBookingsApi(client)
+retrieve_booking_instance = RetrieveBookingApi(client)
+cancel_booking_instance = CancelBookingApi(client)
 ```
 
 ### Booking list
@@ -662,15 +681,16 @@ The get_bookings_list_by_guestId function returns the list of all booking Id's f
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    guestId = "FrT56hfty"
-    result = booking_management_instance.get_bookings_list_by_guestId(guestId)
+    client_reference = "client123"
+result = list_bookings_instance.list_bookings(client_reference=client_reference)
+print(result)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **guestId** | **String** | The Guest Id of the user | [required]
+ **client_reference** | **String** | Optional client reference for filtering bookings | [optional]
 
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
@@ -680,6 +700,9 @@ An array containing objects with the following properties:
 | Name        | Type   | Description        |
 | ----------- | ------ | ------------------ |
 | **bookingId** | **String** | The booking ID.    |
+| **status** | **String** | The status of the booking.    |
+| **createdAt** | **String** | The creation date of the booking.    |
+| **clientReference** | **String** | The client reference.    |
 
 
 <br>
@@ -691,8 +714,9 @@ The retrieved_booking function returns the status and the details of a specific 
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    bookingId = "a5qlc92p5"
-    result = booking_management_instance.retrieved_booking(bookingId)
+   booking_id = "a5qlc92p5"
+result = retrieve_booking_instance.retrieve_booking(booking_id)
+print(result)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
@@ -744,8 +768,9 @@ The cancel_booking function is used to request a cancellation of an existing con
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    bookingId = "a5qlc92p5"
-    result = booking_management_instance.cancel_booking(bookingId)
+    booking_id = "a5qlc92p5"
+result = cancel_booking_instance.cancel_booking(booking_id)
+print(result)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
@@ -764,6 +789,101 @@ Name | Type | Description  | Notes
 | **cancellation_fee** | **number** | The cancellation fee.       |
 | **refund_amount**    | **number** | The refund amount.          |
 | **currency**     | **String** | The currency of the booking. |
+
+<br>
+
+
+# Vouchers and loyalty
+
+LiteAPI provides straightforward access to voucher details, including codes and discounts, along with current loyalty program status and cashback rates.
+
+```python
+ client = LiteApiClient(api_key="your_api_key")
+```
+## Vouchers
+
+The getVouchers function retrieves a list of all available vouchers. This endpoint provides details such as the voucher code, discount type and value, validity period, and other relevant information.
+
+*  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
+```python
+vouchers_api = GetVouchersApi(client)
+result = vouchers_api.retrieve_all_vouchers()
+print(result)
+```
+*  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
+
+This function does not require any parameters.
+
+*  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
+
+An array of city objects containing the following properties:
+
+| Field    | Type       | Description           |
+| -------- | ---------- | --------------------- |
+| **voucherCode** | **String** | The code of the voucher |
+| **discount** | **Object** | An object containing discount details (type, value) |
+| **validity** | **Object** | An object with start and end date for voucher usage |
+
+<br>
+
+## VoucherID
+
+The getVoucherById function retrieves details of a specific voucher by its ID. This includes the voucher code, discount details, usage limits, and more.
+
+*  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
+```python
+client = LiteApiClient(api_key="your_api_key")
+voucher_api = GetVoucherByIdApi(client)
+
+voucher_id = 123  
+result = voucher_api.retrieve_voucher_by_id(voucher_id)
+print(result)
+```
+*  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
+
+| Name            | Type       | Description                                | Notes      |
+| --------------- | ---------- | ------------------------------------------ | ---------- |
+| **voucher_id**     | **Integer**  | The ID of the voucher to retrieve.		| [required] |
+
+*  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
+
+An array of country objects containing the following properties:
+
+| Field    | Type       | Description                       |
+| -------- | ---------- | --------------------------------- |
+| **voucherCode** | **String** | The code of the voucher |
+| **discount** | **Object** | An object containing discount details |
+| **usageLimits** | **Object** | An object with usage limit details |
+| **validity** | **Object** | An object with start and end date for voucher usage |
+
+
+<br>
+
+## Loyalty Program
+
+The getLoyalty function retrieves information about current loyalty program settings, including status and cashback rates.
+
+*  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
+```python
+client = LiteApiClient(api_key="your_api_key")
+loyalty_api = GetLoyaltyApi(client)
+
+result = loyalty_api.get_loyalty_program_settings()
+print(result)
+
+```
+*  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
+
+This function does not require any parameters.
+
+*  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
+
+An array of currency objects containing the following properties:
+
+| Name          | Type       | Description                                       |
+| ------------- | ---------- | ------------------------------------------------- |
+| **status**      | **String** | The current status of the loyalty program (active/inactive)   |
+| **cashbackRate** | **Float**  | The cashback rate offered by the loyalty program.|
 
 <br>
 
