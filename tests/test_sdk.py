@@ -46,5 +46,17 @@ class TestLiteApiReal(unittest.TestCase):
         self.assertEqual(response["status"], "success")
         self.assertIn("data", response)
 
+    def test_get_full_rates(self):
+        response = self.api.get_full_rates({
+            "checkin": "2024-12-01",
+            "checkout": "2024-12-05",
+            "hotelIds": [self.test_hotel_id],
+            "occupancies": [{"adults": 2, "children": []}],
+            "guestNationality": "US",
+            "currency": "USD",
+            "roomMapping": True
+        })
+        self.assertIn("data", response)
+
 if __name__ == '__main__':
     unittest.main()
