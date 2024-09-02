@@ -26,7 +26,7 @@ class LiteApi:
         url = f"{self.service_url}/hotels/rates"
         return self._make_request(url, method='POST', data=data)
 
-    def pre_book(self, data):
+    def prebook(self, data):
         if not isinstance(data, dict) or not data.get('offerId'):
             return {"status": "failed", "errors": ["The offerId is required"]}
 
