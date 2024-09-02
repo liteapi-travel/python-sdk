@@ -10,6 +10,9 @@ class TestLiteApiReal(unittest.TestCase):
         cls.api = LiteApi(cls.api_key)
 
         cls.test_hotel_id = "lp1897"
+        cls.test_offer_id = "GE5ESNBSIZKVMQ2QJJNEERSPKIZEMR2OIRKVOVCTKNFVMRCWKNLUWVKKGVDVMRKWGJEEWRSOIVEVCS2PJRFEUVKPK5JVKSKSI5LFKVKTLBFFMSSEJVJEGRCKIZHEMR2SGJBEYSSDIVJVIS2LJNHEIVJSK5FUSTCGI5LEKVKLJBFEKWSFJFITETSLJJFUKT2SKJLUSNKGKRDVKWSYJJHEYRKVK5BVUS22IZLESVKDKNFE4TCFJ5KVGRKHKJCFKVKRJNKUSRSJKRDU4Q2IJJDE4RKJKVFU4R2NGJCVOVSLGJEVUR2WJ5JEGVCLIJEVMU2WINIEUVSKIZGVEMSOJRDEWRJSKRFUGS2OIVCUGV2LIVEVMSCFK5LUWTKJJJGVKT2TGJFEYSSMKVHVGSSVJNJEMVKTK5JVKSJVINLE6VSDJZFFMSSGKVJDEV2HLJCEKS2VKNKEUNKJIZBVOU2FJFDEOVSFKZFUQSKWJZCUSUSLJ5GEUSSVJ5KEWWSJKJAVIT2RKNKUWQSKIVKVEQ2EJJLEMRSPKNBUOR22INCVGVCLINFTKRCVGJLUWRCJGVFVMR2VINDEUWSGIVFVIS2VJNFEGRKPKNFVUSKSINKTIUKTJ5ETKQ2WKVIVUU2KKZFEMUKSJNBEYSSDIVHVIMSTJNDEIVKDG5BFKR2NGJBTITS2KVIFCWSEIFGVEVKGKVMVIRKMJJJUONCRIRCU2WRSI5AVSRCVJVBFCUCSJJCTM7BWGI4TK7BSPRWHAMJYHE3XYMRNPRKVGRD4KVJXYMRQGI2C2MJSFUZTA7BSGAZDILJRGIWTGML4PQ3S4MBQ"
+        cls.test_booking_id = "0QYXiyJGP"
+        cls.test_voucher_id = "68"
 
     def test_get_countries(self):
         response = self.api.get_countries()
@@ -56,6 +59,41 @@ class TestLiteApiReal(unittest.TestCase):
             "currency": "USD",
             "roomMapping": True
         })
+        self.assertIn("data", response)
+
+    def test_prebook(self):
+        response = self.api.prebook({"offerId": self.test_offer_id})
+        self.assertEqual(response["status"], "success")
+        self.assertIn("data", response)
+
+    def test_book(self):
+        response = self.api.book({"offerId": self.test_offer_id})
+        self.assertEqual(response["status"], "success")
+        self.assertIn("data", response)
+
+    def test_retrieve_booking(self):
+        response = self.api.retrieve_booking(self.test_booking_id)
+        self.assertEqual(response["status"], "success")
+        self.assertIn("data", response)
+
+    def test_cancel_booking(self):
+        response = self.api.cancel_booking(self.test_booking_id)
+        self.assertEqual(response["status"], "success")
+        self.assertIn("data", response)
+
+    def test_get_vouchers(self):
+        response = self.api.get_vouchers()
+        self.assertEqual(response["status"], "success")
+        self.assertIn("data", response)
+
+    def test_get_voucher_by_id(self):
+        response = self.api.get_voucher_by_id(self.test_voucher_id)
+        self.assertEqual(response["status"], "success")
+        self.assertIn("data", response)
+
+    def test_get_loyalty(self):
+        response = self.api.get_loyalty()
+        self.assertEqual(response["status"], "success")
         self.assertIn("data", response)
 
 if __name__ == '__main__':
