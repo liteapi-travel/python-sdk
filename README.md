@@ -23,7 +23,6 @@
     - [Hotel rate prebook](#hotel-rate-prebook)
     - [Hotel rate book](#hotel-rate-book)
   - [Booking management](#booking-management)
-    - [Booking list](#booking-list)
     - [Booking retrieve](#booking-retrieve)
     - [Booking cancel](#booking-cancel)
   - [Vouchers and loyalty](#vouchers)
@@ -87,10 +86,9 @@ After you have installed the LiteAPI package, you need to configure it with your
 client = LiteApiClient(api_key="your_api_key")
 
 # Usage example for any API endpoint
-# For instance, using GetCurrenciesApi as an example:
-currencies_api = GetCurrenciesApi(client)
-response = currencies_api.get_currencies()
+response = client.get("/data/currencies")
 print(response)
+
 ```
 
 # Static data
@@ -100,19 +98,17 @@ Static data can be directly fetched from the functions below. Alternatively, Lit
 To fetch static data from the functions, you need to create an instance of the StaticDataApi as follows:
 
 ```python
-  # Initialize the client with your API key
+ # Initialize the client with your API key
 client = LiteApiClient(api_key="your_api_key")  # Replace "your_api_key" with your actual API key
 
-# Create an instance of StaticDataApi
-static_data_api = StaticDataApi(client)
-
 # Fetch the list of countries
-response_countries = static_data_api.get_countries()
+response_countries = client.get("/data/countries")
 print(response_countries)
 
 # Fetch the list of cities by country code
-response_cities = static_data_api.get_cities_by_country_code(country_code="IT")
+response_cities = client.get("/data/cities", params={"countryCode": "IT"})
 print(response_cities)
+
 ```
 ## List of cities
 
@@ -122,12 +118,8 @@ The get_cities function returns a list of city names from a specific country. Th
 ```python
 client = LiteApiClient(api_key="your_api_key")  
 
-cities_api = GetCitiesByCountryCodeApi(client)
-
-country_code = "US"  # Example country code in ISO-2 format
-result = cities_api.get_cities_by_country_code(country_code)
-
-print(result)
+response = client.get("/data/cities", params={"countryCode": "US"})
+print(response)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
@@ -155,7 +147,9 @@ The get_countries function returns the list of countries available along with it
 ```python
 client = LiteApiClient(api_key="your_api_key")  
 
-countries_api = GetCountriesApi(client)
+response = client.get("/data/countries")
+print(response)
+
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
@@ -180,7 +174,10 @@ The get_currencies function returns all available currency codes along with its 
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-currencies_api = GetCurrenciesApi(client)
+client = LiteApiClient(api_key="your_api_key")
+
+response = client.get("/data/currencies")
+print(response)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
@@ -206,32 +203,10 @@ The get_hotels function returns a list of hotels available based on different se
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-country_code = "IT"
-city_name = "Rome"
-result = hotels_api.get_hotels(country_code=country_code, city_name=city_name)
-```
+client = LiteApiClient(api_key="your_api_key")  
 
-To utilize optional values, you can invoke the function as follows:
-
-```python
-   country_code = "IT"
-city_name = "Rome"
-offset = 10
-limit = 100
-longitude = -115.16988
-latitude = 36.12510
-radius = 1000
-result = hotels_api.get_hotels(
-    country_code=country_code,
-    city_name=city_name,
-    offset=offset,
-    limit=limit,
-    longitude=longitude,
-    latitude=latitude,
-    radius=radius
-)
-# Print the result
-print(result)
+response = client.get("/data/hotels", params={"countryCode": "IT"})
+print(response)
 ```
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
@@ -287,8 +262,10 @@ The get_hotel_details function returns all the static contents details of a hote
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    hotelId =  "lp24373"
-    result = hotel_details_api.get_hotel_details(hotel_id)
+    client = LiteApiClient(api_key="your_api_key")
+
+response = client.get("/data/hotel", params={"hotelId": "lp1897"})
+print(response)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 | Name        | Type       | Description          | Notes      |
@@ -333,7 +310,11 @@ The get_iata_codes function returns the IATA (International Air Transport Associ
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    iata_codes_api = GetIataCodesApi(client)
+client = LiteApiClient(api_key="your_api_key")
+
+response = client.get("/data/iataCodes")
+print(response)
+
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
@@ -366,11 +347,6 @@ booking management.
 
 To access the search functionality and retrieve available hotels, you need to create an instance of the SearchApi as follows:
 
-```python
-from python_sdk.client import LiteApiClient
-from python_sdk.apis.search.get_rates import GetRatesApi
-```
-
 ### Retrieve rates for hotels
 ------
 This endpoint allows developers to retrieve detailed rate information for hotels, supporting multi-room bookings. By making a POST request with the required parameters, you receive an array of offers, each containing comprehensive rate details. This endpoint is essential for providing users with detailed booking options, including pricing and room specifications.
@@ -379,46 +355,17 @@ The request requires an array of hotelIds (up to 200 per request), checkin, chec
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    hotel_ids = ["lp3803c", "lp1f982", "lp19b70", "lp19e75"]
-checkin = "2023-11-15"
-checkout = "2023-11-16"
-currency = "USD"
-guest_nationality = "US"
-adults = 1
+client = LiteApiClient(api_key="your_api_key")
 
-# Fetch full rates with required parameters
-result = search_instance.get_rates(
-    hotel_ids=hotel_ids,
-    occupancies=[{"adults": adults}],
-    checkin=checkin,
-    checkout=checkout,
-    currency=currency,
-    guest_nationality=guest_nationality
-)
-
-# Print the result
-print(result)
-```
-
-To exclude the optional values, you can simply set them to null in the function call:
-```python
-   children = [12, 9]
-guest_id = "traveler1"
-
-# Fetch full rates with optional parameters
-result = search_instance.get_rates(
-    hotel_ids=hotel_ids,
-    occupancies=[{"adults": adults, "children": children}],
-    checkin=checkin,
-    checkout=checkout,
-    currency=currency,
-    guest_nationality=guest_nationality,
-    timeout=10,
-    guest_id=guest_id
-)
-
-# Print the result
-print(result)
+response = client.post("/hotels/rates", data={
+    "hotelIds": ["lp1897"],
+    "checkin": "2024-12-30",
+    "checkout": "2024-12-31",
+    "currency": "USD",
+    "guestNationality": "US",
+    "occupancies": [{"adults": 2, "children": []}]
+})
+print(response)
 ```
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
@@ -468,17 +415,6 @@ An array of hotel full rates with the following properties:
 
 To perform pre booking and booking operations, you need to create an instance of the BookApi as follows:
 
-```python
-from python_sdk.client import LiteApiClient
-from python_sdk.apis.bookings.make_booking.pre_book import PreBookApi
-from python_sdk.apis.bookings.make_booking.book import BookApi
-
-client = LiteApiClient(api_key="your_api_key")  
-
-prebook_instance = PreBookApi(client)
-book_instance = BookApi(client)
-```
-
 ### Hotel rate prebook
 ------
 
@@ -487,11 +423,15 @@ The response will include a prebookId which is used to confirm the booking in th
 The usePaymentSdk parameter is used to determine if the payment form will be displayed using the client-side Payment SDK or not.
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    offer_id = "NRYDGOBQGNRXYMRQGIZS2MJRFUYTK7BSGAZDGLJRGEWTCNT4GF6HYVKTPRDVKM2UKFHFUUSHJEZUGR2OJJKEMWKZKRAU2QSRI5AVSQ2HJZFFQSCBGNKEGTKSK5GDIWSEJFHFUVKHIVNEIR2OKJIUYNCZKY3E2QZXI5AVEVCLJZNFSRZULFJUOVSLKR6FKU2EPR6HYOBVFYYTA7D4IJHXYNJXHA3TC7BR"
-use_payment_sdk = False
+client = LiteApiClient(api_key="your_api_key")
 
-result = prebook_instance.create_checkout_session(offer_id=offer_id, use_payment_sdk=use_payment_sdk)
-print(result)
+payload = {
+    "usePaymentSdk": True,
+    "offerId": "GE5ESNKHKZJVMQ2GJJLEERSPKRFUUR2OINDEOVCTKVEVURCWKNGTEVKJKZDVKRKWGJEEURK2KVEVGMSPJNFEWVKPKNFVUSKSJBKTEV2TLFETKS2UI5JEGVCKLJHEMS2SGJNEOSSNIZJVIS2LJFJEIVKTK5FUKSKWJBCUKVKTJBFEMTSGJFIUUWCJJJFFKT2RJMZESUSFKUZFGU2UJE2UOVSTK5BVUTCKI5CTMVCCKZFE4TCFJ5HDERCLLJDFKNCOKNDUUTSLKRCVES2RJNDE4RKLKEZE4SKOINDECVKLGJEVEQ2VGZIVGVKLIJFEKV2WINDEWWSKKZJVIMSLI5NEGRKHKRJTES2OIRLEWV2TIVEVMSCVKVLUWSCLIUZEKSKRJNHEWSSNIU3FMU2EJRBEIVSHKVJUKSJVJVLFKUSDKRFFURSFJFJDETSMIZFUMR2UINFUWNKEKVJU4Q2VJJGTGVKHKUZEUTCKIVCVCV2LJZFUUSKVJ5JUUU2JKJBFKMSVKNKEUQSDKZJVMQ2MJJLEERSDKVBVER2KINCUGTRSIRFU4RCVJNLUWVKKGVDVKSKOINEEURK2IVEVCS2OJRFEWVKPKFFVGS22INLESV2TIVFE4RSFJFJEUVKKIZHEMR2SGJBEYSSDIVJVIQ2LJNFEIVKTKYZFKSKWJBKVKUKLJBEVKWSGJFLEWTSJJJEVQWKNKJLUOWJTKM2E4WSYKBIVURCBJVJFKRSVLFKEKTCKKNEEKUKEINHEUMSHIFMUIVKNIJIVAUSKIU3HYNRSHE2XYMT4NRYDCOBZG56DELL4KVJUI7CVKN6DEMBSGQWTCMRNGMYHYMRQGI2C2MJSFUZTC7D4GEYS4MBQ"
+}
+
+response_prebook = client.post("/rates/prebook", data=payload, use_service="booking")
+print("Response from prebook:", response_prebook)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
@@ -558,50 +498,29 @@ The response will confirm the booking along with a booking Id and a hotel confir
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 
 ```python
-    prebook_id = "Qh1l16Tiu"
-client_reference = "client123"
-holder = {
-    "firstName": "Kim",
-    "lastName": "James",
-    "email": "test@nlite.ml"
+client = LiteApiClient(api_key="your_api_key")
+
+booking_payload = {
+    "holder": {
+        "firstName": "Steve",
+        "lastName": "Doe",
+        "email": "s.doe@liteapi.travel"
+    },
+    "payment": {"method": "ACC_CREDIT_CARD"},
+    "prebookId": "qkXV4GYJu",  # Replace with the valid prebook ID
+    "guests": [
+        {
+            "occupancyNumber": 1,
+            "remarks": "quiet room please",
+            "firstName": "Sunny",
+            "lastName": "Mars",
+            "email": "s.mars@liteapi.travel"
+        }
+    ]
 }
-guests = [
-    {
-        "firstName": "Kim",
-        "lastName": "James",
-        "email": "test@nlite.ml"
-    }
-]
-payment_method = "CREDIT_CARD"
 
-# Complete booking with credit card details
-result = book_instance.complete_booking(
-    prebook_id=prebook_id,
-    client_reference=client_reference,
-    holder=holder,
-    guests=guests,
-    payment_method=payment_method,
-    transaction_id=None
-)
-print(result)
-```
-
-If you prefer to use a Stripe token, you can invoke the function in the following manner:
-
-```python
-   payment_method = "STRIPE_TOKEN"
-transaction_id = "G4WTCNT4GJ6HYVKTPRDVSWSEJVMVUV2"
-
-# Complete booking with Stripe token
-result = book_instance.complete_booking(
-    prebook_id=prebook_id,
-    client_reference=client_reference,
-    holder=holder,
-    guests=guests,
-    payment_method=payment_method,
-    transaction_id=transaction_id
-)
-print(result)
+response_book = client.post("/rates/book", data=booking_payload, use_service="booking")
+print("Response from book hotel:", response_book)
 ```
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
@@ -609,7 +528,6 @@ print(result)
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **prebookId** | **String**| prebook id retrieved from prebook response| [required]
-**client_reference** | **String**| Client reference for the booking| [required]|
 **holder** | **Object**| An object containing the guest's details (first name, last name, email) | [required]
 **holderName** | **String**| name of the cardholder	| [required]
 **guests** | **Array**| List of guest objects containing guest details. | [required]
@@ -661,52 +579,6 @@ An object containing booking information and room details.
 
 To manage bookings to perform various operations such as retrieving a list of bookings, fetching details of a specific booking, and cancelling a booking, you need to create an instance of the BookingManagementApi instance as follows:
 
-```python
-from python_sdk.client import LiteApiClient
-from python_sdk.apis.bookings.manage_booking.list_bookings import ListBookingsApi
-from python_sdk.apis.bookings.manage_booking.retrieve_booking import RetrieveBookingApi
-from python_sdk.apis.bookings.manage_booking.cancel_booking import CancelBookingApi
-
-client = LiteApiClient(api_key="your_api_key")  
-
-list_bookings_instance = ListBookingsApi(client)
-retrieve_booking_instance = RetrieveBookingApi(client)
-cancel_booking_instance = CancelBookingApi(client)
-```
-
-### Booking list
-------
-
-The get_bookings_list_by_guestId function returns the list of all booking Id's for a given guest Id.
-
-*  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
-```python
-    client_reference = "client123"
-result = list_bookings_instance.list_bookings(client_reference=client_reference)
-print(result)
-```
-*  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **client_reference** | **String** | Optional client reference for filtering bookings | [optional]
-
-
-*  <h4 style="color:#9155fd; font-weight: 800;"> Return type :</h4>
-
-An array containing objects with the following properties:
-
-| Name        | Type   | Description        |
-| ----------- | ------ | ------------------ |
-| **bookingId** | **String** | The booking ID.    |
-| **status** | **String** | The status of the booking.    |
-| **createdAt** | **String** | The creation date of the booking.    |
-| **clientReference** | **String** | The client reference.    |
-
-
-<br>
-
 ### Booking retrieve
 ------
 
@@ -714,9 +586,11 @@ The retrieved_booking function returns the status and the details of a specific 
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-   booking_id = "a5qlc92p5"
-result = retrieve_booking_instance.retrieve_booking(booking_id)
-print(result)
+client = LiteApiClient(api_key="your_api_key")
+
+# Retrieve booking
+response_retrieve = client.get("/bookings/twopYuLE_", use_service="booking")
+print("Response from retrieve booking:", response_retrieve)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
@@ -768,9 +642,10 @@ The cancel_booking function is used to request a cancellation of an existing con
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-    booking_id = "a5qlc92p5"
-result = cancel_booking_instance.cancel_booking(booking_id)
-print(result)
+ client = LiteApiClient(api_key="your_api_key")
+
+response_cancel = client.put("/bookings/FXCRBydUu", use_service="booking")
+print("Response from cancel booking:", response_cancel)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
@@ -797,18 +672,16 @@ Name | Type | Description  | Notes
 
 LiteAPI provides straightforward access to voucher details, including codes and discounts, along with current loyalty program status and cashback rates.
 
-```python
- client = LiteApiClient(api_key="your_api_key")
-```
 ## Vouchers
 
 The getVouchers function retrieves a list of all available vouchers. This endpoint provides details such as the voucher code, discount type and value, validity period, and other relevant information.
 
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
-vouchers_api = GetVouchersApi(client)
-result = vouchers_api.retrieve_all_vouchers()
-print(result)
+client = LiteApiClient(api_key="your_api_key")
+
+response = client.get("/vouchers", use_service="voucher")
+print(response)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
@@ -833,11 +706,9 @@ The getVoucherById function retrieves details of a specific voucher by its ID. T
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
 client = LiteApiClient(api_key="your_api_key")
-voucher_api = GetVoucherByIdApi(client)
 
-voucher_id = 123  
-result = voucher_api.retrieve_voucher_by_id(voucher_id)
-print(result)
+response = client.get("/vouchers/68", use_service="voucher")
+print(response)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 
@@ -866,11 +737,9 @@ The getLoyalty function retrieves information about current loyalty program sett
 *  <h4 style="color:#9155fd; font-weight: 800;"> Example :</h4>
 ```python
 client = LiteApiClient(api_key="your_api_key")
-loyalty_api = GetLoyaltyApi(client)
 
-result = loyalty_api.get_loyalty_program_settings()
-print(result)
-
+response = client.get("/loyalties")
+print(response)
 ```
 *  <h4 style="color:#9155fd; font-weight: 800;"> Parameters :</h4>
 

@@ -1,14 +1,17 @@
+# python_sdk/client.py
+
 import requests
 from typing import Any, Dict, Optional
 
 class LiteApiClient:
     def __init__(self, api_key: str, service_url: str = "https://api.liteapi.travel/v3.0",
                  book_service_url: str = "https://book.liteapi.travel/v3.0",
-                 dashboard_url: str = "https://da.liteapi.travel", timeout: int = 10):
+                 voucher_service_url: str = "https://da.liteapi.travel",
+                 timeout: int = 10):
         self.api_key = api_key
         self.service_url = service_url
         self.book_service_url = book_service_url
-        self.dashboard_url = dashboard_url
+        self.voucher_service_url = voucher_service_url
         self.timeout = timeout
 
     def _make_request(self, url: str, method: str = 'GET', headers: Optional[Dict[str, str]] = None,
@@ -16,6 +19,7 @@ class LiteApiClient:
         if headers is None:
             headers = {
                 'accept': 'application/json',
+                'content-type': 'application/json',
                 'X-API-Key': self.api_key
             }
 
@@ -30,10 +34,30 @@ class LiteApiClient:
 
         return {"status": "success", "data": response.json()}
 
-    def get(self, endpoint: str, params: Optional[Dict] = None) -> Dict[str, Any]:
-        url = f"{self.service_url}{endpoint}"
+    def get(self, endpoint: str, params: Optional[Dict] = None, use_service: str = "default") -> Dict[str, Any]:
+        # Determine base URL based on service type
+        base_url = self._determine_base_url(use_service)
+        url = f"{base_url}{endpoint}"
         return self._make_request(url, method='GET', params=params)
 
-    def post(self, endpoint: str, data: Optional[Dict] = None, headers: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
-        url = f"{self.service_url}{endpoint}"
+    def post(self, endpoint: str, data: Optional[Dict] = None, headers: Optional[Dict[str, str]] = None,
+             use_service: str = "default") -> Dict[str, Any]:
+        # Determine base URL based on service type
+        base_url = self._determine_base_url(use_service)
+        url = f"{base_url}{endpoint}"
         return self._make_request(url, method='POST', data=data, headers=headers)
+
+    def put(self, endpoint: str, data: Optional[Dict] = None, headers: Optional[Dict[str, str]] = None,
+            use_service: str = "default") -> Dict[str, Any]:
+        # Determine base URL based on service type
+        base_url = self._determine_base_url(use_service)
+        url = f"{base_url}{endpoint}"
+        return self._make_request(url, method='PUT', data=data, headers=headers)
+
+    def _determine_base_url(self, use_service: str) -> str:
+        if use_service == "booking":
+            return self.book_service_url
+        elif use_service == "voucher":
+            return self.voucher_service_url
+        else:
+            return self.service_url

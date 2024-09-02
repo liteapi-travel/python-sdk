@@ -12,13 +12,14 @@ class CancelBookingApi:
         booking_id: str,
         timeout: Optional[float] = 4.0
     ) -> Dict[str, Any]:
-         
-        endpoint = f"{self.client.book_service_url}/bookings/{booking_id}"
-
-        params = {
-            "timeout": timeout,
+        endpoint = f"/bookings/{booking_id}"
+        
+        headers = {
+            "accept": "application/json",
+            "X-API-Key": self.client.api_key
         }
 
-        response = self.client.post(endpoint, data=params)
+        response = self.client.put(endpoint, data={"timeout": timeout}, headers=headers, use_service="booking")
 
         return response
+

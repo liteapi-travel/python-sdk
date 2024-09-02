@@ -5,7 +5,7 @@ from .apis.country import GetCountriesApi
 from .apis.currencies import GetCurrenciesApi
 from .apis.iata_codes import GetIataCodesApi
 from .apis.search import GetRatesApi
-from .apis.bookings import PreBookApi, BookApi, ListBookingsApi, RetrieveBookingApi, CancelBookingApi
+from .apis.bookings import PreBookApi, BookApi, RetrieveBookingApi, CancelBookingApi
 from .apis.loyalty import GetLoyaltyApi
 from .apis.vouchers import GetVouchersApi, GetVoucherByIdApi
 
@@ -21,7 +21,6 @@ __all__ = [
     "GetRatesApi",
     "PreBookApi",
     "BookApi",
-    "ListBookingsApi",
     "RetrieveBookingApi",
     "CancelBookingApi",
     "GetLoyaltyApi",
