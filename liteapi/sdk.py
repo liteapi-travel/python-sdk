@@ -109,7 +109,7 @@ class LiteApi:
         url = f"{self.service_url}/data/iataCodes"
         return self._make_request(url)
 
-    def get_places(self, text_query, place_type, language):
+    def get_places(self, text_query, place_type=None, language=None):
         if not text_query:
             return {"status": "failed", "errors": ["text_query is required"]}
 
