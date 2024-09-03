@@ -10,6 +10,8 @@ api = LiteApi(API_KEY)
 
 def run_workflow():
     try:
+        print("Running the workflow...")
+
         # Step 1: Fetch a list of hotels in New York, US
         hotels_response = api.get_hotels(country_code="US", city_name="New York", limit=200)
         hotels = hotels_response["data"]
