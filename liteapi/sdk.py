@@ -109,6 +109,32 @@ class LiteApi:
         url = f"{self.service_url}/data/iataCodes"
         return self._make_request(url)
 
+    def get_places(self, text_query, place_type, language):
+        if not text_query:
+            return {"status": "failed", "errors": ["text_query is required"]}
+
+        params = {
+            'textQuery': text_query,
+            'type': place_type,
+            'language': language
+        }
+        params = {k: v for k, v in params.items() if v is not None}
+        query = '&'.join([f"{key}={value}" for key, value in params.items()])
+        url = f"{self.service_url}/data/places?{query}"
+        return self._make_request(url)
+
+    def get_hotel_facilities(self):
+        url = f"{self.service_url}/data/facilities"
+        return self._make_request(url)
+
+    def get_hotel_types(self):
+        url = f"{self.service_url}/data/hotelTypes"
+        return self._make_request(url)
+
+    def get_hotel_chains(self):
+        url = f"{self.service_url}/data/chains"
+        return self._make_request(url)
+
     def get_guests_ids(self, email=""):
         params = {'email': email} if email else {}
         query = '&'.join([f"{key}={value}" for key, value in params.items()])

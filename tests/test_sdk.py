@@ -58,5 +58,25 @@ class TestLiteApiReal(unittest.TestCase):
         })
         self.assertIn("data", response)
 
+    def test_get_places(self):
+        response = self.api.get_places("hilton New York", "hotel", "en")
+        self.assertEqual(response["status"], "success")
+        self.assertIn("data", response)
+
+    def test_get_hotel_facilities(self):
+        response = self.api.get_hotel_facilities()
+        self.assertEqual(response["status"], "success")
+        self.assertIn("data", response)
+
+    def test_get_hotel_types(self):
+        response = self.api.get_hotel_types()
+        self.assertEqual(response["status"], "success")
+        self.assertIn("data", response)
+
+    def test_get_hotel_chains(self):
+        response = self.api.get_hotel_chains()
+        self.assertEqual(response["status"], "success")
+        self.assertIn("data", response)
+
 if __name__ == '__main__':
     unittest.main()

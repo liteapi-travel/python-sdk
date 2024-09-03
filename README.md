@@ -315,6 +315,59 @@ response = api.get_loyalty()
 print(response)
 ```
 
+### `get_places(text_query, place_type, language)`
+
+**Description:**
+Fetches a list of places based on a text query. The results can be filtered by place type and language.
+
+**Parameters:**
+- `text_query` (str): The text query to search for places. This parameter is required.
+- `place_type` (str): The type of place to search for (optional).
+- `language` (str): The language in which the results should be returned (optional).
+
+**Usage:**
+
+```python
+response = api.get_places("hilton New York", "hotel", "en")
+print(response)
+```
+
+### `get_hotel_facilities()`
+
+**Description:**
+Returns a list of hotel facilities available across hotels.
+
+**Usage:**
+
+```python
+response = api.get_hotel_facilities()
+print(response)
+```
+
+### `get_hotel_types()`
+
+**Description:**
+Returns a list of hotel types (e.g., resort, hotel, guesthouse) available.
+
+**Usage:**
+
+```python
+response = api.get_hotel_types()
+print(response)
+```
+
+### `get_hotel_chains()`
+
+**Description:**
+Returns a list of hotel chains.
+
+**Usage:**
+
+```python
+response = api.get_hotel_chains()
+print(response)
+```
+
 ---
 
 ## Testing

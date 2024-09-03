@@ -3,14 +3,14 @@ from datetime import datetime, timedelta
 from liteapi import LiteApi
 
 # Constants
-API_KEY = 'sand_ca230deb-5a6b-42e7-bb72-869facd8892b'
+API_KEY = 'sand_c0155ab8-c683-4f26-8f94-b5e92c5797b9'
 
 # Initialize the LiteApi SDK
 api = LiteApi(API_KEY)
 
 def run_workflow():
     try:
-        print("Running the workflow...")
+        print("Running end-to-end testing workflow...")
 
         # Step 1: Fetch a list of hotels in New York, US
         hotels_response = api.get_hotels(country_code="US", city_name="New York", limit=200)
@@ -30,7 +30,7 @@ def run_workflow():
             "occupancies": [{"adults": 2}],
             "currency": "USD",
             "guestNationality": "US",
-            "timeout": 10
+            "timeout": 5
         })
 
         rates = rates_response["data"]
