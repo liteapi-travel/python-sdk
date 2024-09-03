@@ -97,7 +97,7 @@ python3 -m unittest discover tests
 
 ---
 
-## Build and publish the package
+## Build the SDK and publish the package
 
 ```bash
 pip install setuptools wheel
