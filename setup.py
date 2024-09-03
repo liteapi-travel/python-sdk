@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="liteapi-sdk",
-    version="3.0.1",
+    version="3.0.3",
     description="A Python SDK for interacting with the LiteApi travel platform",
     packages=find_packages(),
     install_requires=[
